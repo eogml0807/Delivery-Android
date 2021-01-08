@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btnMyPageToHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="홈으로" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <Button
+                android:id="@+id/btnMyInfo"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="내 정보" />
+
+            <Button
+                android:id="@+id/btnMyOrderedList"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="내 배달 내역" />
+
+            <Button
+                android:id="@+id/btnModMyInfo"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="내 정보 수정" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:id="@+id/MyGrid01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:columnCount="2"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/ivMyDlvrImg"
+                    android:layout_width="80dp"
+                    android:layout_height="120dp"
+                    android:layout_columnSpan="2"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="아이디" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrId"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="아이디 출력" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="이름" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrName"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="이름 출력" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="전화번호" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="전화번호 출력" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="이메일" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="이메일 출력" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="주소" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrAddr"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="주소 출력" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="포인트" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrPoint"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="포인트 출력" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="배달 등급" />
+
+                <TextView
+                    android:id="@+id/txtMyDlvrRank"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:text="등급 출력" />
+
+            </GridLayout>
+
+            <LinearLayout
+                android:id="@+id/MyLin01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:id="@+id/MyLinMod01"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="비밀번호" />
+
+                        <EditText
+                            android:id="@+id/edtModDlvrPw"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"/>
+
+                        <TextView
+                            android:id="@+id/txtChkModDlvrPwForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="비밀번호 형식 확인" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="비밀번호 확인" />
+
+                        <EditText
+                            android:id="@+id/edtModDlvrPwDupl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"/>
+
+                        <TextView
+                            android:id="@+id/txtChkModDlvrPwDupl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="비밀번호 일치 확인" />
+
+                        <Button
+                            android:id="@+id/btnModDlvrImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="이미지 변경" />
+
+                        <ImageView
+                            android:id="@+id/ivModDlvrImg"
+                            android:layout_width="200dp"
+                            android:layout_height="200dp" />
+
+                        <Button
+                            android:id="@+id/btnClearImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="이미지 변경 취소"/>
+
+                        <Button
+                            android:id="@+id/btnModNext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="다음" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/MyLinMod02"
+                        android:visibility="invisible"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="전화번호 변경" />
+
+                        <EditText
+                            android:id="@+id/edtModDlvrPhone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"/>
+
+                        <TextView
+                            android:id="@+id/txtChkModDlvrPhoneForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="전화번호 형식 확인"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="이메일 변경" />
+
+                        <EditText
+                            android:id="@+id/edtModDlvrEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"/>
+
+                        <TextView
+                            android:id="@+id/txtChkModDlvrEmailForm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="이메일 형식 확인" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="주소 변경" />
+
+                        <Button
+                            android:id="@+id/btnSeacrhModAddr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="주소 검색" />
+
+                        <EditText
+                            android:id="@+id/edtModDlvrAddr"
+                            android:editable="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"/>
+
+                        <EditText
+                            android:id="@+id/edtModDlvrDetailAddr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="상세 주소 입력"
+                            android:inputType="text"/>
+
+                        <Button
+                            android:id="@+id/btnClearAddr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="주소 삭제"/>
+
+                        <Button
+                            android:id="@+id/btnModPrev"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="이전" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.15"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <Button
+                        android:id="@+id/btnModOk"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="정보 수정" />
+
+                    <Button
+                        android:id="@+id/btnDeleteAccount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="계정 탈퇴" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/MyLin02"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="invisible">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="배달 번호" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="카테고리" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="배달 날짜" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="결제 금액" />
+
+                    </TableRow>
+                </TableLayout>
+
+                <ListView
+                    android:id="@+id/lvMyOrderedList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

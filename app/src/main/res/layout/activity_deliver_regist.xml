@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f4f4f4"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:id="@+id/linReg1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/edtRegDlvrId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="  아이디"
+                android:inputType="text"
+                android:maxLines="1"
+                android:nextFocusDown="@id/edtRegDlvrPw" />
+
+            <TextView
+                android:id="@+id/txtChkDlvrIdForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/btnCheckIdDupl"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="중복 아이디 확인"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/edtRegDlvrPw"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="  비밀번호"
+                android:inputType="textPassword"
+                android:maxLength="16"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/txtChkDlvrPwForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edtRegDlvrPwDupl"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="  비밀번호 확인"
+                android:inputType="textPassword"
+                android:maxLength="16"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/txtChkDlvrPwDupl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text=""
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linReg2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <EditText
+                android:id="@+id/edtRegDlvrName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="  이름"
+                android:inputType="text"
+                android:maxLines="1"
+                android:nextFocusDown="@id/edtRegDlvrEmail" />
+
+            <TextView
+                android:id="@+id/txtChkDlvrNameForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edtRegDlvrEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="이메일 입력"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:nextFocusDown="@id/edtRegDlvrPhone" />
+
+            <TextView
+                android:id="@+id/txtChkEmailForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edtRegDlvrPhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="  전화번호"
+                android:inputType="phone"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/txtChkDlvrPhoneForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linReg3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <Button
+                android:id="@+id/btnSelectBirth"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="생년월일 선택"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/txtRegDlvrBirth"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:editable="false"
+                android:hint="  생년월일"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/btnSeacrhAddr"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="주소 검색"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/edtRegDlvrAddr"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="#FFDED7"
+                android:editable="false"
+                android:hint="주소"
+                android:inputType="text"
+                android:maxLines="1" />
+
+            <EditText
+                android:id="@+id/edtRegDlvrDetailAddr"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#FFDED7"
+                android:hint="  상세 주소 입력"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linReg4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/ivRegDlvrImg"
+                android:layout_width="match_parent"
+                android:layout_height="450dp" />
+
+            <Button
+                android:id="@+id/btnRegDlvrImg"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="프로필 사진 선택"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linReg5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/ivRegDlvrIdCard"
+                android:layout_width="match_parent"
+                android:layout_height="450dp" />
+
+            <Button
+                android:id="@+id/btnRegDlvrIdCard"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="신분증 사진 선택"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
+
+        <Button
+            android:id="@+id/btnRegPrev"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="이전"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btnRegNext"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="다음"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kh.delivery_project.activities.Activity_KakaoMap">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnKakaoMapToHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="홈으로" />
+
+        <Button
+            android:id="@+id/btnShowOrderList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="주문 리스트 보기" />
+
+        <Button
+            android:id="@+id/btnShowMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="지도 보기" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtCurrentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="현재 위치"
+        android:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/frm_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frm_order"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:id="@+id/frm_order_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtOrderList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="반경 1km 이내 주문 정보"
+                    android:visibility="visible" />
+
+                <ListView
+                    android:id="@+id/lvOrderList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/frm_order_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="*">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:text="주문 번호"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txt_d_OrderNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:text="주문 번호 입력"
+                            android:textColor="#000000" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="주문 아이디"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txt_d_UserName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:text="아이디 입력"
+                            android:textColor="#000000" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="픽업 위치"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txt_d_OrderAddr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:text="픽업 위치 입력"
+                            android:textColor="#000000" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="주문 요구사항"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txt_d_OrderReq"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:text="요구사항 입력"
+                            android:textColor="#000000" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent">
+
+                        <Button
+                            android:id="@+id/btn_dlvr_success"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="배달 완료" />
+                        <Button
+                            android:id="@+id/btn_dlvr_cancel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="배달 취소" />
+                    </TableRow>
+                </TableLayout>
+
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
+</LinearLayout>
