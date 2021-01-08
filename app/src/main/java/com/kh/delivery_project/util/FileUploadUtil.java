@@ -73,7 +73,7 @@ public class FileUploadUtil implements Keys {
 
     private static void access(Context context) {
         awsCredentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
-        s3 = new AmazonS3Client(awsCredentials, Region.getRegion(Regions.AP_NORTHEAST_2));
+        s3 = new AmazonS3Client(awsCredentials, Region.getRegion(REGIONS));
         transferUtility = TransferUtility.builder().s3Client(s3).context(context).build();
         TransferNetworkLossHandler.getInstance(context);
     }
