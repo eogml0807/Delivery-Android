@@ -31,7 +31,6 @@ public class UrlImageUtil extends AsyncTask<Void, Void, Bitmap> {
             if(bitmapHash.containsKey(urlStr)) {
                 Bitmap oldbitmap = bitmapHash.remove(urlStr);
                 if(oldbitmap != null) {
-                    oldbitmap.recycle();
                     oldbitmap = null;
                 }
             }

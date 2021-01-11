@@ -25,18 +25,94 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="10dp">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/linLastTimeline"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="게시판으로 이동" />
+                android:layout_height="120dp"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="최신 글" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="아이디 : " />
+
+                    <TextView
+                        android:id="@+id/txtLastWriterName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이름"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="글 내용 : " />
+
+                    <TextView
+                        android:id="@+id/txtLastTimeContent"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="글 내용"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linLastTimeStar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="별점 : " />
+
+                    <TextView
+                        android:id="@+id/txtLastTimeStar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp" />
+
+                    <RatingBar
+                        android:id="@+id/rbLastTimeStar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:rating="2" />
+                </LinearLayout>
+            </LinearLayout>
 
             <Button
-                android:id="@+id/btnDMainToBoard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="게시판" />
+                android:id="@+id/btnMainToTimeline"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:text="타임라인"
+                android:textColor="#000000"
+                android:textSize="30dp" />
 
         </LinearLayout>
 
@@ -63,18 +139,106 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="현재 배달 중인지, 배달액티비티로" />
+                android:layout_height="wrap_content"
+                android:text="현재 배달중인 주문" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/linMainNoOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="현재 배달중인 주문이 없습니다."
+                        android:textSize="20dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linMainOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="카테고리 : " />
+
+                        <TextView
+                            android:id="@+id/txtMainOrderCa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="카테고리 종류"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="요구사항 : " />
+
+                        <TextView
+                            android:id="@+id/txtMainOrderReq"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="요구사항 내용"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="배달위치 : " />
+
+                        <TextView
+                            android:id="@+id/txtMainOrderLoc"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="배달위치 작성"
+                            android:textSize="20dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </FrameLayout>
 
             <Button
-                android:id="@+id/btnStartDeliver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="배달 시작" />
+                android:id="@+id/btnStartDelivery"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:text="배달 시작!"
+                android:textColor="#000000"
+                android:textSize="30dp" />
 
         </LinearLayout>
     </LinearLayout>

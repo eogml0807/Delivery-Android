@@ -29,13 +29,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.Activity_Deliver_Regist"
-            android:parentActivityName=".activities.Activity_Home"/>
+            android:parentActivityName=".activities.Activity_Home"
+            android:theme="@style/ActionBar"/>
         <activity android:name=".activities.Activity_FindAccount"
-            android:parentActivityName=".activities.Activity_Home"/>
+            android:parentActivityName=".activities.Activity_Home"
+            android:theme="@style/ActionBar"/>
         <activity android:name=".activities.Activity_Deliver_Main"/>
         <activity android:name=".activities.Activity_Deliver_MyPage" />
-        <activity android:name=".activities.Activity_KakaoMap" />
-        <activity android:name=".activities.Activity_Timeline"/>
+        <activity android:name=".activities.Activity_KakaoMap"
+            android:parentActivityName=".activities.Activity_Deliver_Main"
+            android:theme="@style/ActionBar"/>
+        <activity android:name=".activities.Activity_Timeline"
+            android:parentActivityName=".activities.Activity_Deliver_Main"
+            android:theme="@style/ActionBar"/>
         <activity android:name=".activities.Activity_WebView"/>
         <activity
             android:name=".activities.Dialog_PickedOrder"

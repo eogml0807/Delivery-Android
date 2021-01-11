@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -30,8 +32,10 @@ import com.kh.delivery_project.adapters.Adapter_OrderList;
 import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.domain.UserVo;
+import com.kh.delivery_project.util.AddressUtil;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
+import com.kh.delivery_project.util.PreferenceManager;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -45,7 +49,6 @@ public class Activity_KakaoMap extends AppCompatActivity
         implements View.OnClickListener, MapView.POIItemEventListener, MapView.MapViewEventListener,
                     MapView.CurrentLocationEventListener, Codes {
 
-    Geocoder geocoder = new Geocoder(this);
     Gson gson = new Gson();
 
     MapView mapView;
@@ -66,8 +69,7 @@ public class Activity_KakaoMap extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kakaomap);
-
-        getIntents();
+        deliverVo = PreferenceManager.getDeliverVo(this);
         setViews();
         setListeners();
         getPickedOrderVo();
@@ -84,11 +86,6 @@ public class Activity_KakaoMap extends AppCompatActivity
         if(map != null) {
             this.pickedOrderVo = ConvertUtil.getOrderVo(map);
         }
-    }
-
-    private void getIntents() {
-        Intent intent = getIntent();
-        this.deliverVo = intent.getParcelableExtra("deliverVo");
     }
 
     private void setMaps() {
@@ -222,15 +219,9 @@ public class Activity_KakaoMap extends AppCompatActivity
             int distance = Math.round(order_loc.distanceTo(deliver_loc));
             if(distance <= (range * 1000)) {
                 OrderVo orderVo = ConvertUtil.getOrderVo(map);
-                try {
-                    List<Address> addrList = geocoder.getFromLocation(order_lat, order_lng, 1);
-                    Address address = addrList.get(0);
-                    String order_addr = address.getAddressLine(0);
-                    orderVo.setOrder_addr(order_addr.substring(order_addr.indexOf("국")+2));
-                    orderVo.setDistance(distance);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                String order_addr = AddressUtil.getAddress(this, order_lat, order_lng);
+                orderVo.setOrder_addr(order_addr.substring(order_addr.indexOf("국")+2));
+                orderVo.setDistance(distance);
                 orderList.add(orderVo);
             }
         }
@@ -258,14 +249,8 @@ public class Activity_KakaoMap extends AppCompatActivity
         txt_d_UserName.setText(pickedOrderVo.getUser_name());
         double order_lat = pickedOrderVo.getOrder_lat();
         double order_lng = pickedOrderVo.getOrder_lng();
-        try {
-            List<Address> addrList = geocoder.getFromLocation(order_lat, order_lng, 1);
-            Address address = addrList.get(0);
-            String order_addr = address.getAddressLine(0);
-            pickedOrderVo.setOrder_addr(order_addr.substring(order_addr.indexOf("국")+2));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String order_addr = AddressUtil.getAddress(this, order_lat, order_lng);
+        pickedOrderVo.setOrder_addr(order_addr);
         txt_d_OrderAddr.setText(pickedOrderVo.getOrder_addr());
         txt_d_OrderReq.setText(pickedOrderVo.getOrder_req());
     }
@@ -460,4 +445,5 @@ public class Activity_KakaoMap extends AppCompatActivity
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
         Log.d("current", "canceled");
     }
+
 }

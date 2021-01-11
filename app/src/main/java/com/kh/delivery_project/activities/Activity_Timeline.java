@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -22,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import com.kh.delivery_project.domain.TimelineVo;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
 import com.kh.delivery_project.util.FileUploadUtil;
+import com.kh.delivery_project.util.PreferenceManager;
 
 import java.io.File;
 import java.io.InputStream;
@@ -73,16 +76,11 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
-        getIntents();
+        deliverVo = PreferenceManager.getDeliverVo(this);
         setViews();
         setSpinner();
         setListeners();
         setTimelineList(ALL_TIMELINE);
-    }
-
-    private void getIntents() {
-        Intent intent = getIntent();
-        this.deliverVo = intent.getParcelableExtra("deliverVo");
     }
 
     private void setViews() {
@@ -141,7 +139,7 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
 
     private void setListview() {
         boardListView.setAdapter(null);
-        adapter = new Adapter_TimelineList(this, R.layout.view_boardlist, showList);
+        adapter = new Adapter_TimelineList(this, R.layout.view_timelinelist, showList);
         boardListView.setAdapter(adapter);
     }
 

@@ -50,6 +50,7 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        PreferenceManager.removeDeliverVo(this);
         setViews();
         setListeners();
         setPermission();
@@ -112,8 +113,8 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
     private void isAutoLogin() {
         boolean auto_login = PreferenceManager.getBoolean(this, "auto_login");
         if (auto_login) {
-            String dlvr_id = PreferenceManager.getString(this, "dlvr_id");
-            String dlvr_pw = PreferenceManager.getString(this, "dlvr_pw");
+            String dlvr_id = PreferenceManager.getString(this, "auto_dlvr_id");
+            String dlvr_pw = PreferenceManager.getString(this, "auto_dlvr_pw");
             DeliverVo deliverVo = login(dlvr_id, dlvr_pw);
             if (deliverVo != null) {
                 Intent intent = new Intent(getApplicationContext(), Activity_Deliver_Main.class);
@@ -122,8 +123,8 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
                 startActivity(intent);
             } else {
                 PreferenceManager.removeKey(this, "auto_login");
-                PreferenceManager.removeKey(this, "dlvr_id");
-                PreferenceManager.removeKey(this, "dlvr_pw");
+                PreferenceManager.removeKey(this, "auto_dlvr_id");
+                PreferenceManager.removeKey(this, "auto_dlvr_pw");
 
                 Toast.makeText(this, "계정 없어짐", Toast.LENGTH_SHORT).show();
             }
@@ -140,6 +141,7 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
             params.put("dlvr_pw", dlvr_pw);
             Map<String, Object> map = gson.fromJson(ConnectServer.getData(url, params), Map.class);
             DeliverVo deliverVo = ConvertUtil.getDeliverVo(map);
+            PreferenceManager.setDeliverVo(this, deliverVo);
             return deliverVo;
         }
         return null;
@@ -167,13 +169,11 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
                 DeliverVo deliverVo = login(dlvr_id, dlvr_pw);
                 if (deliverVo != null) {
                     if (autoLogin) {
-                        PreferenceManager.setString(this, "dlvr_id", deliverVo.getDlvr_id());
-                        PreferenceManager.setString(this, "dlvr_pw", deliverVo.getDlvr_pw());
+                        PreferenceManager.setString(this, "auto_dlvr_id", deliverVo.getDlvr_id());
+                        PreferenceManager.setString(this, "auto_dlvr_pw", deliverVo.getDlvr_pw());
                         PreferenceManager.setBoolean(this, "auto_login", true);
                     }
-
                     intent = new Intent(getApplicationContext(), Activity_Deliver_Main.class);
-                    intent.putExtra("deliverVo", deliverVo);
                     finish();
                     startActivity(intent);
                 } else {

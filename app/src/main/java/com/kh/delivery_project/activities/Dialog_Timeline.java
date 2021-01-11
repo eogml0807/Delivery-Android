@@ -27,6 +27,7 @@ import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.TimelineVo;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.FileUploadUtil;
+import com.kh.delivery_project.util.PreferenceManager;
 import com.kh.delivery_project.util.UrlImageUtil;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class Dialog_Timeline extends Activity implements View.OnClickListener, C
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_timeline);
+        deliverVo = PreferenceManager.getDeliverVo(this);
         getIntents();
         setViews();
         setListeners();
@@ -80,8 +82,6 @@ public class Dialog_Timeline extends Activity implements View.OnClickListener, C
     private void getIntents() {
         Intent intent = getIntent();
         this.timelineVo = intent.getParcelableExtra("timelineVo");
-        this.deliverVo = intent.getParcelableExtra("deliverVo");
-        Log.d("timelineVo", timelineVo.toString());
     }
 
     private void setViews() {
