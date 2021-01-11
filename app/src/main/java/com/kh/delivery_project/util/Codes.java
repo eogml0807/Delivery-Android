@@ -3,9 +3,7 @@ package com.kh.delivery_project.util;
 public interface Codes {
 
     // permission 관련
-    int REQUEST_ACCESS_FINE_LOCATION = 1000;
-    int REQUEST_READ_EXTERNAL_STORAGE = 1001;
-    int REQUEST_WRITE_EXTERNAL_STORAGE = 1002;
+    int PREMISSIONS = 1000;
     // permission 관련 끝
 
     // intent 관련
@@ -24,7 +22,7 @@ public interface Codes {
     int PICK_ORDER = 10201;
 
     // 타임라인 관련
-    int WRITE_IMG = 10301;
+    int WRITE_TIME_IMG = 10301;
     int MOD_TIME_IMG = 10302;
 
     // timeline 관련

@@ -16,13 +16,13 @@ import java.util.Map;
 
 public class ConvertUtil {
 
-    private static Date getBirth(String str_birth) throws Exception {
+    public static Date getBirth(String str_birth) throws Exception {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(df.parse(str_birth).getTime());
         return date;
     }
 
-    private static Timestamp getDate(String str_date) throws Exception {
+    public static Timestamp getDate(String str_date) throws Exception {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Timestamp timestamp = new Timestamp(df.parse(str_date).getTime());
         return timestamp;

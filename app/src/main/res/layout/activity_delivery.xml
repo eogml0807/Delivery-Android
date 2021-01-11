@@ -4,55 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kh.delivery_project.activities.Activity_KakaoMap">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnKakaoMapToHome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="홈으로" />
-
-        <Button
-            android:id="@+id/btnShowOrderList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="주문 리스트 보기" />
-
-        <Button
-            android:id="@+id/btnShowMap"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="지도 보기" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtCurrentLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="현재 위치"
-        android:visibility="visible" />
+    tools:context="com.kh.delivery_project.activities.Activity_Delivery">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="600dp"
+        android:padding="10dp">
 
         <LinearLayout
-            android:id="@+id/frm_map"
+            android:id="@+id/linMap"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <LinearLayout
-                android:id="@+id/map_view"
+                android:id="@+id/mapView"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_gravity="center_horizontal"
@@ -62,24 +28,24 @@
         </LinearLayout>
 
         <FrameLayout
-            android:id="@+id/frm_order"
+            android:id="@+id/frmOrder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/frm_order_list"
+                android:id="@+id/linOrderList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/txtOrderList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="반경 1km 이내 주문 정보"
-                    android:visibility="visible" />
+                    android:text="반경 1km 이내 주문 정보" />
 
                 <ListView
                     android:id="@+id/lvOrderList"
@@ -89,11 +55,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/frm_order_info"
+                android:id="@+id/linOrderInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="invisible">
+                android:visibility="gone">
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -112,7 +78,7 @@
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/txt_d_OrderNo"
+                            android:id="@+id/txtPickedOrderNo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_horizontal"
@@ -128,15 +94,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="주문 아이디"
+                            android:text="주문자 이름"
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/txt_d_UserName"
+                            android:id="@+id/txtPickedUserName"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_horizontal"
-                            android:text="아이디 입력"
+                            android:text="주문자 이름 입력"
                             android:textColor="#000000" />
                     </TableRow>
 
@@ -152,7 +118,7 @@
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/txt_d_OrderAddr"
+                            android:id="@+id/txtPickedOrderLoc"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_horizontal"
@@ -172,7 +138,7 @@
                             android:textColor="#000000" />
 
                         <TextView
-                            android:id="@+id/txt_d_OrderReq"
+                            android:id="@+id/txtPickedOrderReq"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_horizontal"
@@ -180,17 +146,17 @@
                             android:textColor="#000000" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent">
+                    <TableRow android:layout_width="match_parent">
 
                         <Button
-                            android:id="@+id/btn_dlvr_success"
+                            android:id="@+id/btnDeliveryComplete"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="배달 완료" />
+
                         <Button
-                            android:id="@+id/btn_dlvr_cancel"
+                            android:id="@+id/btnDeliveryCancel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -201,4 +167,24 @@
             </LinearLayout>
         </FrameLayout>
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnShowOrderList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="주문 리스트 보기"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnShowMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="지도 보기" />
+
+    </LinearLayout>
 </LinearLayout>

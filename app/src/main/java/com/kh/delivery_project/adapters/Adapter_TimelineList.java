@@ -5,16 +5,19 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.kh.delivery_project.R;
 import com.kh.delivery_project.domain.TimelineVo;
+import com.kh.delivery_project.util.Codes;
+import com.kh.delivery_project.util.UrlImageUtil;
 
 import java.util.List;
 
-public class Adapter_TimelineList extends BaseAdapter {
+public class Adapter_TimelineList extends BaseAdapter implements Codes {
 
     private Context context;
     private int layout;

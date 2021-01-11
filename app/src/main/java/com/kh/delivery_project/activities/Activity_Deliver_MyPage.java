@@ -33,6 +33,7 @@ import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
 import com.kh.delivery_project.util.FileUploadUtil;
+import com.kh.delivery_project.util.PreferenceManager;
 import com.kh.delivery_project.util.UrlImageUtil;
 
 import java.io.File;
@@ -66,8 +67,8 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deliver_mypage);
-
-        getIntents();
+        deliverVo = PreferenceManager.getDeliverVo(this);
+        modVals = new String[]{deliverVo.getDlvr_pw(), deliverVo.getDlvr_phone(), deliverVo.getDlvr_email(), deliverVo.getDlvr_addr(), deliverVo.getDlvr_img()};
         setViews();
         setListeners();
         getCompletedOrder();
@@ -102,12 +103,6 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         txtMyDlvrAddr.setText(deliverVo.getDlvr_addr());
         txtMyDlvrPoint.setText(String.valueOf(deliverVo.getDlvr_point()));
         txtMyDlvrRank.setText(deliverVo.getDlvr_rank());
-    }
-
-    private void getIntents() {
-        Intent intent = getIntent();
-        this.deliverVo = intent.getParcelableExtra("deliverVo");
-        this.modVals = new String[]{deliverVo.getDlvr_pw(), deliverVo.getDlvr_phone(), deliverVo.getDlvr_email(), deliverVo.getDlvr_addr(), deliverVo.getDlvr_img()};
     }
 
     private void setViews() {
