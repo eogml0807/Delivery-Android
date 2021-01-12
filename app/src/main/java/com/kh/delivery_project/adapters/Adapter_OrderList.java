@@ -14,12 +14,12 @@ import java.util.List;
 
 public class Adapter_OrderList extends BaseAdapter {
 
-    Context contex;
+    Context context;
     int layout;
     List<OrderVo> orderList;
 
-    public Adapter_OrderList(Context contex, int layout, List<OrderVo> orderList) {
-        this.contex = contex;
+    public Adapter_OrderList(Context context, int layout, List<OrderVo> orderList) {
+        this.context = context;
         this.layout = layout;
         this.orderList = orderList;
     }
@@ -42,7 +42,7 @@ public class Adapter_OrderList extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = View.inflate(contex, layout, null);
+            convertView = View.inflate(context, layout, null);
         }
 
         TextView txtOrderInfo = convertView.findViewById(R.id.txtOrderInfo);

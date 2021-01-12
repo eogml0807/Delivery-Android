@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.sql.Timestamp;
 
 public class OrderVo implements Parcelable {
+    // 테이블 컬럼
     private int order_no;
     private String order_ca;
     private String order_req;
@@ -18,7 +19,7 @@ public class OrderVo implements Parcelable {
     private int distance;
     private String order_addr;
 
-    // 조인으로 가져오는 값
+    // 조인 컬럼
     private String user_name;
     private String code_detail;
     private String dlvr_name;

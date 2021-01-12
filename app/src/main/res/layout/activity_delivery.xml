@@ -15,7 +15,7 @@
             android:id="@+id/linMap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/mapView"
@@ -31,7 +31,7 @@
             android:id="@+id/frmOrder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/linOrderList"
@@ -59,132 +59,243 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:visibility="gone">
 
-                <TableLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:stretchColumns="*">
+                    android:layout_height="wrap_content">
 
-                    <TableRow
+                    <TextView
+                        android:id="@+id/txtOrderInfoMain"
                         android:layout_width="match_parent"
-                        android:layout_weight="1">
+                        android:layout_height="100dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="35dp"
+                        android:gravity="center"
+                        android:text="주문 정보" />
+
+                    <LinearLayout
+                        android:id="@+id/linOrderNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtOrderInfoMain"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="100dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="주문 번호"
-                            android:textColor="#000000" />
+                            android:textSize="25dp" />
 
                         <TextView
                             android:id="@+id/txtPickedOrderNo"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="100dp"
                             android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="주문 번호 입력"
-                            android:textColor="#000000" />
-                    </TableRow>
+                            android:textSize="25dp" />
 
-                    <TableRow
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linUserName"
                         android:layout_width="match_parent"
-                        android:layout_weight="1">
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/linOrderNo"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
                             android:gravity="center"
                             android:text="주문자 이름"
-                            android:textColor="#000000" />
+                            android:textSize="25dp" />
 
                         <TextView
                             android:id="@+id/txtPickedUserName"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="주문자 이름 입력"
-                            android:textColor="#000000" />
-                    </TableRow>
+                            android:textSize="25dp" />
 
-                    <TableRow
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linOrderLoc"
                         android:layout_width="match_parent"
-                        android:layout_weight="1">
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/linUserName"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="픽업 위치"
-                            android:textColor="#000000" />
+                            android:textSize="25dp" />
 
                         <TextView
                             android:id="@+id/txtPickedOrderLoc"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="픽업 위치 입력"
-                            android:textColor="#000000" />
-                    </TableRow>
+                            android:textSize="25dp" />
 
-                    <TableRow
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linOrderReq"
                         android:layout_width="match_parent"
-                        android:layout_weight="1">
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/linOrderLoc"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
                             android:gravity="center"
                             android:text="주문 요구사항"
-                            android:textColor="#000000" />
+                            android:textSize="25dp" />
 
                         <TextView
                             android:id="@+id/txtPickedOrderReq"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_height="100dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:text="요구사항 입력"
-                            android:textColor="#000000" />
-                    </TableRow>
+                            android:textSize="25dp" />
 
-                    <TableRow android:layout_width="match_parent">
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/linOrderInfoButtons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/linOrderReq"
+                        android:orientation="horizontal">
 
                         <Button
                             android:id="@+id/btnDeliveryComplete"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
                             android:text="배달 완료" />
 
                         <Button
                             android:id="@+id/btnDeliveryCancel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
                             android:text="배달 취소" />
-                    </TableRow>
-                </TableLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
 
             </LinearLayout>
         </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ListView
+                android:id="@+id/lvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#FFD6FB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnMessageImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="이미지" />
+
+                    <Button
+                        android:id="@+id/btnSendMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="보내기" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="#FFC8C8"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <Button
             android:id="@+id/btnShowOrderList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="주문 리스트 보기"
-            android:visibility="gone" />
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:text="주문 정보 보기" />
 
         <Button
             android:id="@+id/btnShowMap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
             android:text="지도 보기" />
+
+        <Button
+            android:id="@+id/btnShowMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:text="채팅창 보기" />
 
     </LinearLayout>
 </LinearLayout>

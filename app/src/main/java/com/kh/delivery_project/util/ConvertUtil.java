@@ -4,6 +4,7 @@ import android.location.Address;
 import android.util.Log;
 
 import com.kh.delivery_project.domain.DeliverVo;
+import com.kh.delivery_project.domain.MessageVo;
 import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.domain.TimelineVo;
 import com.kh.delivery_project.domain.UserVo;
@@ -109,6 +110,25 @@ public class ConvertUtil {
             timelineVo.setWriter_name((String) map.get("writer_name"));
             timelineVo.setDlvr_name((String) map.get("dlvr_name"));
             return timelineVo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static MessageVo getMessageVo(Map<String, Object> map) {
+        try {
+            MessageVo messageVo = new MessageVo();
+            messageVo.setMsg_no((int) (double) map.get("msg_no"));
+            messageVo.setOrder_no((int) (double) map.get("order_no"));
+            messageVo.setSender_no((int) (double) map.get("sender_no"));
+            messageVo.setReceiver_no((int) (double) map.get("receiver_no"));
+            messageVo.setMsg_content((String) map.get("msg_content"));
+            messageVo.setMsg_img((String) map.get("msg_img"));
+            messageVo.setMsg_date(getDate((String) map.get("msg_date")));
+            messageVo.setSender_name((String) map.get("sender_name"));
+            messageVo.setSender_img((String) map.get("sender_img"));
+            return messageVo;
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -7,20 +7,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -28,19 +35,23 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.kh.delivery_project.R;
+import com.kh.delivery_project.adapters.Adapter_Message;
 import com.kh.delivery_project.connection.ConnectServer;
 import com.kh.delivery_project.adapters.Adapter_OrderList;
 import com.kh.delivery_project.domain.DeliverVo;
+import com.kh.delivery_project.domain.MessageVo;
 import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.util.AddressUtil;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
+import com.kh.delivery_project.util.FileUploadUtil;
 import com.kh.delivery_project.util.PreferenceManager;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,23 +64,33 @@ public class Activity_Delivery extends AppCompatActivity
 
     MapView mapView;
     FrameLayout frmOrder;
-    LinearLayout linOrderList, linMap, linOrderInfo;
-    Button btnShowOrderList, btnShowMap, btnDeliveryComplete, btnDeliveryCancel;
+    LinearLayout linOrderList, linMap, linOrderInfo, linMessage;
+    Button btnShowOrderList, btnShowMap, btnDeliveryComplete, btnDeliveryCancel, btnShowMessage, btnMessageImg, btnSendMessage;
     ListView lvOrderList;
     TextView txtOrderList, txtPickedOrderNo, txtPickedUserName, txtPickedOrderLoc, txtPickedOrderReq,
                 txtDialogOrderNo, txtDialogUserName, txtDialogOrderLoc, txtDialogOrderReq;
     ViewGroup mapViewContainer;
+    EditText edtMessage;
+    ListView lvMessage;
 
     DeliverVo deliverVo;
     OrderVo pickedOrderVo;
     List<OrderVo> orderList = new ArrayList<>();
+    List<MessageVo> messageList = new ArrayList<>();
+    Adapter_Message adapter;
+    MessageThread thread = new MessageThread();
 
-    private int range = 1;
+    File msg_img;
+    String str_msg_img;
+    int lastMsgNo;
+    int range = 1;
+    boolean stop = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         deliverVo = PreferenceManager.getDeliverVo(this);
         setViews();
         setListeners();
@@ -78,12 +99,93 @@ public class Activity_Delivery extends AppCompatActivity
         checkRunTimePermission();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stop = true;
+    }
+
+    private void setLvMessage() {
+        String url = "/message/getMessageList";
+        ContentValues params = new ContentValues();
+        params.put("order_no", pickedOrderVo.getOrder_no());
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
+        for(int i = 0; i < list.size(); i++) {
+            Map<String, Object> map = list.get(i);
+            MessageVo messageVo = ConvertUtil.getMessageVo(map);
+            messageList.add(messageVo);
+
+            if (i == list.size()-1) {
+                lastMsgNo = messageVo.getMsg_no();
+            }
+        }
+
+        adapter = new Adapter_Message(messageList, deliverVo, getLayoutInflater());
+        lvMessage.setAdapter(adapter);
+        thread.start();
+    }
+
+    public void getCurrentMessage() {
+        String url = "/message/getCurrentMessage";
+        ContentValues params = new ContentValues();
+        params.put("order_no", pickedOrderVo.getOrder_no());
+        params.put("msg_no", lastMsgNo);
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
+        Log.d("메시지리스트", list.toString());
+        if(list.size() > 0) {
+            for(int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = list.get(i);
+                Log.d("메시지맵", map.toString());
+                MessageVo messageVo = ConvertUtil.getMessageVo(map);
+                Log.d("메시지브이오", messageVo.toString());
+                messageList.add(messageVo);
+
+                if (i == list.size()-1) {
+                    lastMsgNo = messageVo.getMsg_no();
+                }
+            }
+            adapter.notifyDataSetChanged();
+            lvMessage.setSelection(messageList.size()-1);
+        }
+    }
+
+    private String sendMsgContent() {
+        String msg_content = edtMessage.getText().toString();
+        if(msg_content != null && !msg_content.equals("")) {
+            String url = "/message/sendMsgContent";
+            ContentValues params = new ContentValues();
+            params.put("order_no", pickedOrderVo.getOrder_no());
+            params.put("sender_no", pickedOrderVo.getDlvr_no());
+            params.put("receiver_no", pickedOrderVo.getUser_no());
+            params.put("msg_content", msg_content);
+            String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
+            return result;
+        } else {
+            return "msg_content is null";
+        }
+    }
+
+    private String sendMsgImg() {
+        str_msg_img = MESSAGE_IMG + deliverVo.getDlvr_id() + "_" + msg_img.getName();
+        String url = "/message/sendMsgImg";
+        ContentValues params = new ContentValues();
+        params.put("order_no", pickedOrderVo.getOrder_no());
+        params.put("sender_no", pickedOrderVo.getDlvr_no());
+        params.put("receiver_no", pickedOrderVo.getUser_no());
+        params.put("msg_img", str_msg_img);
+        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
+        return result;
+    }
+
     private void setViews() {
         mapView = new MapView(this);
         btnShowOrderList = findViewById(R.id.btnShowOrderList);
         btnShowMap = findViewById(R.id.btnShowMap);
         btnDeliveryComplete = findViewById(R.id.btnDeliveryComplete);
         btnDeliveryCancel = findViewById(R.id.btnDeliveryCancel);
+        btnShowMessage = findViewById(R.id.btnShowMessage);
+        btnMessageImg = findViewById(R.id.btnMessageImg);
+        btnSendMessage = findViewById(R.id.btnSendMessage);
         txtOrderList = findViewById(R.id.txtOrderList);
         txtPickedOrderNo = findViewById(R.id.txtPickedOrderNo);
         txtPickedUserName = findViewById(R.id.txtPickedUserName);
@@ -94,6 +196,9 @@ public class Activity_Delivery extends AppCompatActivity
         linMap = findViewById(R.id.linMap);
         linOrderList = findViewById(R.id.linOrderList);
         linOrderInfo = findViewById(R.id.linOrderInfo);
+        linMessage = findViewById(R.id.linMessage);
+        edtMessage = findViewById(R.id.edtMessage);
+        lvMessage = findViewById(R.id.lvMessage);
         mapViewContainer = (ViewGroup) findViewById(R.id.mapView);
         mapViewContainer.addView(mapView);
     }
@@ -103,6 +208,10 @@ public class Activity_Delivery extends AppCompatActivity
         btnShowMap.setOnClickListener(this);
         btnDeliveryComplete.setOnClickListener(this);
         btnDeliveryCancel.setOnClickListener(this);
+        btnMessageImg.setOnClickListener(this);
+        btnShowMessage.setOnClickListener(this);
+        btnMessageImg.setOnClickListener(this);
+        btnSendMessage.setOnClickListener(this);
         mapView.setMapViewEventListener(this);
         mapView.setPOIItemEventListener(this);
         mapView.setCurrentLocationEventListener(this);
@@ -124,6 +233,7 @@ public class Activity_Delivery extends AppCompatActivity
         if(map != null) {
             pickedOrderVo = ConvertUtil.getOrderVo(map);
             showOrderInfo();
+            setLvMessage();
         }
     }
 
@@ -281,6 +391,7 @@ public class Activity_Delivery extends AppCompatActivity
     }
 
     private void showOrderList() {
+        stop = false;
         pickedOrderVo = null;
         linOrderList.setVisibility(View.VISIBLE);
         linOrderInfo.setVisibility(View.GONE);
@@ -305,16 +416,28 @@ public class Activity_Delivery extends AppCompatActivity
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            if(requestCode == PICK_ORDER) {
-                if(data != null) {
-                    pickedOrderVo = data.getParcelableExtra("orderVo");
-                    Log.d("orderVo", pickedOrderVo.toString());
-                    showOrderInfo();
-                }
+            switch (requestCode) {
+                case PICK_ORDER:
+                    if(data != null) {
+                        pickedOrderVo = data.getParcelableExtra("orderVo");
+                        Log.d("orderVo", pickedOrderVo.toString());
+                        showOrderInfo();
+                    }
+                    break;
+                case MESSAGE_IMAGE:
+                    msg_img = FileUploadUtil.getFile(this, data.getData());
+                    if(FileUploadUtil.isImage(msg_img)) {
+                        if(sendMsgImg().equals("sendMsgImg_success")) {
+                            FileUploadUtil.upload(this, msg_img, str_msg_img);
+                            getCurrentMessage();
+                        }
+                    }
+                    break;
             }
         } else if(requestCode == RESULT_CANCELED) {
             Toast.makeText(this, "다른 사람이 주문 픽업", Toast.LENGTH_SHORT).show();
@@ -328,14 +451,17 @@ public class Activity_Delivery extends AppCompatActivity
             case R.id.btnShowOrderList:
                 linMap.setVisibility(View.GONE);
                 frmOrder.setVisibility(View.VISIBLE);
-                btnShowMap.setVisibility(View.VISIBLE);
-                btnShowOrderList.setVisibility(View.GONE);
+                linMessage.setVisibility(View.GONE);
                 break;
             case R.id.btnShowMap:
                 linMap.setVisibility(View.VISIBLE);
                 frmOrder.setVisibility(View.GONE);
-                btnShowMap.setVisibility(View.GONE);
-                btnShowOrderList.setVisibility(View.VISIBLE);
+                linMessage.setVisibility(View.GONE);
+                break;
+            case R.id.btnShowMessage:
+                linMap.setVisibility(View.GONE);
+                frmOrder.setVisibility(View.GONE);
+                linMessage.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnDeliveryComplete:
                 if(deliveryComplete().equals("delivery_completed")) {
@@ -351,6 +477,20 @@ public class Activity_Delivery extends AppCompatActivity
                 } else {
                     Toast.makeText(this, "What's wrong?", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.btnSendMessage:
+                if(sendMsgContent().equals("sendMsgContent_success")) {
+                    edtMessage.setText("");
+                    getCurrentMessage();
+                } else {
+                    Toast.makeText(this, "글 입력을 하세요", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.btnMessageImg:
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, MESSAGE_IMAGE);
                 break;
         }
     }
@@ -453,6 +593,21 @@ public class Activity_Delivery extends AppCompatActivity
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
         Log.d("current", "canceled");
+    }
+
+    class MessageThread extends Thread {
+        @Override
+        public void run() {
+            while(!stop) {
+                try {
+                    Log.d("스레드 실행중", "...");
+                    getCurrentMessage();
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

@@ -13,6 +13,7 @@ public interface Codes {
     int REGIST_DLVR_IDCARD = 10002;
     int REGIST_DLVR_BIRTH = 10003;
     int REGIST_DLVR_ADDR = 10004;
+    // 회원가입 관련 끝
 
     // 회원정보 수정
     int MOD_DLVR_IMG = 10101;
@@ -25,12 +26,12 @@ public interface Codes {
     int WRITE_TIME_IMG = 10301;
     int MOD_TIME_IMG = 10302;
 
-    // timeline 관련
     int ALL_TIMELINE = 410;
     int NOTICE_TIMELINE = 411;
     int REVIEW_TIMELINE = 412;
     int FREE_TIMELINE = 413;
-    // 회원가입 관련 끝
+
+    int MESSAGE_IMAGE = 10401;
 
     // s3 관련
     // 이미지 앞주소
@@ -40,5 +41,6 @@ public interface Codes {
     String DLVR_IMG = "Dlvr_Img/";
     String DLVR_IDCARD = "Dlvr_IDCard/";
     String TIMELINE_IMG = "Timeline_Img/";
+    String MESSAGE_IMG = "Message_Img/";
     // s3 관련 끝
 }

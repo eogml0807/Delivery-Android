@@ -19,7 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
 
         <activity android:name=".activities.Activity_Home">
             <intent-filter>
@@ -28,21 +30,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.Activity_Deliver_Regist"
+        <activity
+            android:name=".activities.Activity_Deliver_Regist"
             android:parentActivityName=".activities.Activity_Home"
-            android:theme="@style/ActionBar"/>
-        <activity android:name=".activities.Activity_FindAccount"
+            android:theme="@style/ActionBar" />
+        <activity
+            android:name=".activities.Activity_FindAccount"
             android:parentActivityName=".activities.Activity_Home"
-            android:theme="@style/ActionBar"/>
-        <activity android:name=".activities.Activity_Deliver_Main"/>
+            android:theme="@style/ActionBar" />
+        <activity android:name=".activities.Activity_Deliver_Main" />
         <activity android:name=".activities.Activity_Deliver_MyPage" />
-        <activity android:name=".activities.Activity_Delivery"
+        <activity
+            android:name=".activities.Activity_Delivery"
             android:parentActivityName=".activities.Activity_Deliver_Main"
-            android:theme="@style/CustomDialog"/>
-        <activity android:name=".activities.Activity_Timeline"
+            android:theme="@style/CustomDialog" />
+        <activity
+            android:name=".activities.Activity_Timeline"
             android:parentActivityName=".activities.Activity_Deliver_Main"
-            android:theme="@style/CustomDialog"/>
-        <activity android:name=".activities.Activity_WebView"/>
+            android:theme="@style/CustomDialog" />
+        <activity android:name=".activities.Activity_WebView" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="c0a88980c9b9b281aefad70b0181e614" />
