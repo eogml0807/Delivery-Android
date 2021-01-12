@@ -44,6 +44,7 @@ import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.util.AddressUtil;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
+import com.kh.delivery_project.util.DeliveryUtil;
 import com.kh.delivery_project.util.FileUploadUtil;
 import com.kh.delivery_project.util.PreferenceManager;
 
@@ -58,7 +59,7 @@ import java.util.Map;
 
 public class Activity_Delivery extends AppCompatActivity
         implements View.OnClickListener, MapView.POIItemEventListener, MapView.MapViewEventListener,
-                    MapView.CurrentLocationEventListener, Codes {
+        MapView.CurrentLocationEventListener, Codes {
 
     Gson gson = new Gson();
 
@@ -68,7 +69,7 @@ public class Activity_Delivery extends AppCompatActivity
     Button btnShowOrderList, btnShowMap, btnDeliveryComplete, btnDeliveryCancel, btnShowMessage, btnMessageImg, btnSendMessage;
     ListView lvOrderList;
     TextView txtOrderList, txtPickedOrderNo, txtPickedUserName, txtPickedOrderLoc, txtPickedOrderReq,
-                txtDialogOrderNo, txtDialogUserName, txtDialogOrderLoc, txtDialogOrderReq;
+            txtDialogOrderNo, txtDialogUserName, txtDialogOrderLoc, txtDialogOrderReq;
     ViewGroup mapViewContainer;
     EditText edtMessage;
     ListView lvMessage;
@@ -103,78 +104,6 @@ public class Activity_Delivery extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         stop = true;
-    }
-
-    private void setLvMessage() {
-        String url = "/message/getMessageList";
-        ContentValues params = new ContentValues();
-        params.put("order_no", pickedOrderVo.getOrder_no());
-        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
-        for(int i = 0; i < list.size(); i++) {
-            Map<String, Object> map = list.get(i);
-            MessageVo messageVo = ConvertUtil.getMessageVo(map);
-            messageList.add(messageVo);
-
-            if (i == list.size()-1) {
-                lastMsgNo = messageVo.getMsg_no();
-            }
-        }
-
-        adapter = new Adapter_Message(messageList, deliverVo, getLayoutInflater());
-        lvMessage.setAdapter(adapter);
-        thread.start();
-    }
-
-    public void getCurrentMessage() {
-        String url = "/message/getCurrentMessage";
-        ContentValues params = new ContentValues();
-        params.put("order_no", pickedOrderVo.getOrder_no());
-        params.put("msg_no", lastMsgNo);
-        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
-        Log.d("메시지리스트", list.toString());
-        if(list.size() > 0) {
-            for(int i = 0; i < list.size(); i++) {
-                Map<String, Object> map = list.get(i);
-                Log.d("메시지맵", map.toString());
-                MessageVo messageVo = ConvertUtil.getMessageVo(map);
-                Log.d("메시지브이오", messageVo.toString());
-                messageList.add(messageVo);
-
-                if (i == list.size()-1) {
-                    lastMsgNo = messageVo.getMsg_no();
-                }
-            }
-            adapter.notifyDataSetChanged();
-            lvMessage.setSelection(messageList.size()-1);
-        }
-    }
-
-    private String sendMsgContent() {
-        String msg_content = edtMessage.getText().toString();
-        if(msg_content != null && !msg_content.equals("")) {
-            String url = "/message/sendMsgContent";
-            ContentValues params = new ContentValues();
-            params.put("order_no", pickedOrderVo.getOrder_no());
-            params.put("sender_no", pickedOrderVo.getDlvr_no());
-            params.put("receiver_no", pickedOrderVo.getUser_no());
-            params.put("msg_content", msg_content);
-            String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-            return result;
-        } else {
-            return "msg_content is null";
-        }
-    }
-
-    private String sendMsgImg() {
-        str_msg_img = MESSAGE_IMG + deliverVo.getDlvr_id() + "_" + msg_img.getName();
-        String url = "/message/sendMsgImg";
-        ContentValues params = new ContentValues();
-        params.put("order_no", pickedOrderVo.getOrder_no());
-        params.put("sender_no", pickedOrderVo.getDlvr_no());
-        params.put("receiver_no", pickedOrderVo.getUser_no());
-        params.put("msg_img", str_msg_img);
-        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        return result;
     }
 
     private void setViews() {
@@ -230,7 +159,7 @@ public class Activity_Delivery extends AppCompatActivity
         params.put("dlvr_no", deliverVo.getDlvr_no());
 
         Map<String, Object> map = gson.fromJson(ConnectServer.getData(url, params), Map.class);
-        if(map != null) {
+        if (map != null) {
             pickedOrderVo = ConvertUtil.getOrderVo(map);
             showOrderInfo();
             setLvMessage();
@@ -242,20 +171,56 @@ public class Activity_Delivery extends AppCompatActivity
         mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.56682, 126.97865), true);
         // 줌 레벨 변경
         mapView.setZoomLevel(3, true);
-        /*
-        // 중심점 변경 + 줌 레벨 변경
-        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(33.41, 126.52), 9, true);
-        // 줌 인
-        mapView.zoomIn(true);
-        // 줌 아웃
-        mapView.zoomOut(true);
-        */
     }
 
     private void checkRunTimePermission() {
         int checkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        if(checkPermission == PackageManager.PERMISSION_GRANTED) {
+        if (checkPermission == PackageManager.PERMISSION_GRANTED) {
             mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+        }
+    }
+
+    private void setLvMessage() {
+        String url = "/message/getMessageList";
+        ContentValues params = new ContentValues();
+        params.put("order_no", pickedOrderVo.getOrder_no());
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, Object> map = list.get(i);
+            MessageVo messageVo = ConvertUtil.getMessageVo(map);
+            messageList.add(messageVo);
+
+            if (i == list.size() - 1) {
+                lastMsgNo = messageVo.getMsg_no();
+            }
+        }
+
+        adapter = new Adapter_Message(messageList, deliverVo, getLayoutInflater());
+        lvMessage.setAdapter(adapter);
+        thread.start();
+    }
+
+    public void getCurrentMessage() {
+        String url = "/message/getCurrentMessage";
+        ContentValues params = new ContentValues();
+        params.put("order_no", pickedOrderVo.getOrder_no());
+        params.put("msg_no", lastMsgNo);
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
+        Log.d("메시지리스트", list.toString());
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = list.get(i);
+                Log.d("메시지맵", map.toString());
+                MessageVo messageVo = ConvertUtil.getMessageVo(map);
+                Log.d("메시지브이오", messageVo.toString());
+                messageList.add(messageVo);
+
+                if (i == list.size() - 1) {
+                    lastMsgNo = messageVo.getMsg_no();
+                }
+            }
+            adapter.notifyDataSetChanged();
+            lvMessage.setSelection(messageList.size() - 1);
         }
     }
 
@@ -279,8 +244,8 @@ public class Activity_Delivery extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         int order_no = Integer.parseInt(txtDialogOrderNo.getText().toString());
                         int dlvr_no = deliverVo.getDlvr_no();
-                        String result = pickOrder(order_no, dlvr_no);
-                        if(result.equals("pickOrder_success")) {
+                        String result = DeliveryUtil.pickOrder(order_no, dlvr_no);
+                        if (result.equals("pickOrder_success")) {
                             getPickedOrderVo();
                         } else {
                             Toast.makeText(Activity_Delivery.this, "다른 사람이 주문 픽업", Toast.LENGTH_SHORT).show();
@@ -292,18 +257,9 @@ public class Activity_Delivery extends AppCompatActivity
                 .show();
     }
 
-    private String pickOrder(int order_no, int dlvr_no) {
-        String url = "/order/android/pickOrder";
-        ContentValues params = new ContentValues();
-        params.put("order_no", order_no);
-        params.put("dlvr_no", dlvr_no);
-        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        return result;
-    }
-
     private void setOrderMarker() {
-        if(pickedOrderVo == null) {
-            for(int i = 0; i < orderList.size(); i++) {
+        if (pickedOrderVo == null) {
+            for (int i = 0; i < orderList.size(); i++) {
                 OrderVo orderVo = orderList.get(i);
                 double order_lat = orderVo.getOrder_lat();
                 double order_lng = orderVo.getOrder_lng();
@@ -349,7 +305,7 @@ public class Activity_Delivery extends AppCompatActivity
         }
 
         orderList = new ArrayList<>();
-        for(int i = 0; i < data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
             Map<String, Object> map = data.get(i);
             double order_lat = (double) map.get("order_lat");
             double order_lng = (double) map.get("order_lng");
@@ -359,10 +315,10 @@ public class Activity_Delivery extends AppCompatActivity
             order_loc.setLongitude(order_lng);
 
             int distance = Math.round(order_loc.distanceTo(deliver_loc));
-            if(distance <= (range * 1000)) {
+            if (distance <= (range * 1000)) {
                 OrderVo orderVo = ConvertUtil.getOrderVo(map);
                 String order_addr = AddressUtil.getAddress(this, order_lat, order_lng);
-                orderVo.setOrder_addr(order_addr.substring(order_addr.indexOf("국")+2));
+                orderVo.setOrder_addr(order_addr.substring(order_addr.indexOf("국") + 2));
                 orderVo.setDistance(distance);
                 orderList.add(orderVo);
             }
@@ -398,32 +354,14 @@ public class Activity_Delivery extends AppCompatActivity
         btnShowOrderList.setText("주문 리스트 보기");
     }
 
-    private String deliveryComplete() {
-        String url = "/order/android/deliveryCompleted";
-        ContentValues params = new ContentValues();
-        params.put("order_no", pickedOrderVo.getOrder_no());
-        params.put("dlvr_no", pickedOrderVo.getDlvr_no());
-        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        return result;
-    }
-
-    private String deliveryCancel() {
-        String url = "/order/android/cancelDelivery";
-        ContentValues params = new ContentValues();
-        params.put("order_no", pickedOrderVo.getOrder_no());
-        params.put("dlvr_no", pickedOrderVo.getDlvr_no());
-        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        return result;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PICK_ORDER:
-                    if(data != null) {
+                    if (data != null) {
                         pickedOrderVo = data.getParcelableExtra("orderVo");
                         Log.d("orderVo", pickedOrderVo.toString());
                         showOrderInfo();
@@ -431,15 +369,16 @@ public class Activity_Delivery extends AppCompatActivity
                     break;
                 case MESSAGE_IMAGE:
                     msg_img = FileUploadUtil.getFile(this, data.getData());
-                    if(FileUploadUtil.isImage(msg_img)) {
-                        if(sendMsgImg().equals("sendMsgImg_success")) {
+                    if (FileUploadUtil.isImage(msg_img)) {
+                        String result = DeliveryUtil.sendMsgImg(str_msg_img, pickedOrderVo);
+                        if (result.equals("sendMsgImg_success")) {
                             FileUploadUtil.upload(this, msg_img, str_msg_img);
                             getCurrentMessage();
                         }
                     }
                     break;
             }
-        } else if(requestCode == RESULT_CANCELED) {
+        } else if (requestCode == RESULT_CANCELED) {
             Toast.makeText(this, "다른 사람이 주문 픽업", Toast.LENGTH_SHORT).show();
         }
     }
@@ -447,6 +386,7 @@ public class Activity_Delivery extends AppCompatActivity
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        String result;
         switch (id) {
             case R.id.btnShowOrderList:
                 linMap.setVisibility(View.GONE);
@@ -464,7 +404,8 @@ public class Activity_Delivery extends AppCompatActivity
                 linMessage.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnDeliveryComplete:
-                if(deliveryComplete().equals("delivery_completed")) {
+                result = DeliveryUtil.deliveryComplete(pickedOrderVo);
+                if (result.equals("delivery_completed")) {
                     Toast.makeText(this, "배달 완료!!!!!!", Toast.LENGTH_SHORT).show();
                     showOrderList();
                 } else {
@@ -472,14 +413,17 @@ public class Activity_Delivery extends AppCompatActivity
                 }
                 break;
             case R.id.btnDeliveryCancel:
-                if(deliveryCancel().equals("cancelDelivery_success")) {
+                result = DeliveryUtil.deliveryCancel(pickedOrderVo);
+                if (result.equals("cancelDelivery_success")) {
                     showOrderList();
                 } else {
                     Toast.makeText(this, "What's wrong?", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnSendMessage:
-                if(sendMsgContent().equals("sendMsgContent_success")) {
+                String msg_content = edtMessage.getText().toString();
+                result = DeliveryUtil.sendMsgContent(msg_content, pickedOrderVo);
+                if (result.equals("sendMsgContent_success")) {
                     edtMessage.setText("");
                     getCurrentMessage();
                 } else {
@@ -545,10 +489,10 @@ public class Activity_Delivery extends AppCompatActivity
     @Override
     public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
         String str_order_no = mapPOIItem.getItemName();
-        int order_no = Integer.parseInt(str_order_no.substring(str_order_no.lastIndexOf(":")+1));
-        for(int i = 0; i < orderList.size(); i++) {
+        int order_no = Integer.parseInt(str_order_no.substring(str_order_no.lastIndexOf(":") + 1));
+        for (int i = 0; i < orderList.size(); i++) {
             OrderVo orderVo = orderList.get(i);
-            if(order_no == orderVo.getOrder_no()) {
+            if (order_no == orderVo.getOrder_no()) {
                 openDialog(orderVo);
                 break;
             }
@@ -598,7 +542,7 @@ public class Activity_Delivery extends AppCompatActivity
     class MessageThread extends Thread {
         @Override
         public void run() {
-            while(!stop) {
+            while (!stop) {
                 try {
                     Log.d("스레드 실행중", "...");
                     getCurrentMessage();

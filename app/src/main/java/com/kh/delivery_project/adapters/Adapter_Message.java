@@ -89,9 +89,20 @@ public class Adapter_Message extends BaseAdapter implements Codes {
 
         TextView txtMsgDate = messageView.findViewById(R.id.txtMsgDate);
         Timestamp msg_date = messageVo.getMsg_date();
+        String str_msg_date = "";
         int hours = msg_date.getHours();
+        if(hours > 9) {
+            str_msg_date += hours + ":";
+        } else {
+            str_msg_date += "0" + hours + ":";
+        }
         int minutes = msg_date.getMinutes();
-        txtMsgDate.setText(hours + ":" + minutes);
+        if(minutes > 9) {
+            str_msg_date += minutes;
+        } else {
+            str_msg_date += "0" + minutes;
+        }
+        txtMsgDate.setText(str_msg_date);
 
         return messageView;
     }
