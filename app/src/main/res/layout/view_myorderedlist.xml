@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
 
-    <TableLayout
+    <TextView
+        android:id="@+id/txtMyOrderNo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        android:gravity="center"
+        android:text="배달 번호" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <TextView
+        android:id="@+id/txtMyOrderReq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="주문 내역" />
 
-            <TextView
-                android:id="@+id/txtMyOrderNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="배달 번호" />
+    <TextView
+        android:id="@+id/txtMyOrderDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="배달 날짜" />
 
-            <TextView
-                android:id="@+id/txtMyOrderCa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="카테고리" />
+    <TextView
+        android:id="@+id/txtMyOrderState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.1"
+        android:gravity="center"
+        android:text="배달 상태" />
 
-            <TextView
-                android:id="@+id/txtMyOrderDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="배달 날짜" />
-
-            <TextView
-                android:id="@+id/txtMyOrderCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="결제 금액" />
-
-        </TableRow>
-
-    </TableLayout>
 
 </LinearLayout>

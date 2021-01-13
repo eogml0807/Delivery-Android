@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civWriterImg"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/default_img" />
+
+            <TextView
+                android:id="@+id/txtWriterName"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/civWriterImg"
+                android:layout_toRightOf="@+id/civWriterImg"
+                android:text="이름"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txtTimeDate"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/civWriterImg"
+                android:layout_toRightOf="@+id/civWriterImg"
+                android:text="time_date"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txtLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/civWriterImg"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:text="1"
+                android:textSize="30dp" />
+
+            <ImageView
+                android:id="@+id/ivTimeLike"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignBottom="@+id/civWriterImg"
+                android:layout_toLeftOf="@+id/txtLikeCount"
+                android:src="@drawable/ic_favorite_borde" />
+
+            <RatingBar
+                android:id="@+id/rbTimeStar"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivTimeLike"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/txtTimeContent"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/rbTimeStar"
+                android:text="time_content"
+                android:textSize="22dp" />
+
+            <ImageView
+                android:id="@+id/ivTimeImg"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/txtTimeContent"
+                android:layout_centerHorizontal="true" />
+
+            <ListView
+                android:id="@+id/lvCommentList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivTimeImg" />
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

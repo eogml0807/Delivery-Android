@@ -1,8 +1,6 @@
 package com.kh.delivery_project.activities;
 
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,7 +45,7 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
     DrawerLayout drawerLayout;
     View drawerView;
     Button btnMainToTimeline, btnMainToDelivery;
-    RelativeLayout relDlvrInfo, relModDlvrInfo, relHelp, relLogout;
+    RelativeLayout relDlvrInfo, relModDlvrInfo, relMyDelivery, relLogout;
     LinearLayout linTimeline, linDelivery, linMainOrder, linMainNoOrder, linLastTimeStar;
     TextView drawerDlvrName, txtLastWriterName, txtLastTimeContent, txtLastTimeStar, txtMainOrderCa, txtMainOrderReq, txtMainOrderLoc;
     ImageView drawerDlvrImg;
@@ -56,7 +53,6 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
 
     TimelineVo timelineVo;
     DeliverVo deliverVo;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,7 +86,7 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         drawerDlvrImg = findViewById(R.id.drawerDlvrImg);
         relDlvrInfo = findViewById(R.id.relDlvrInfo);
         relModDlvrInfo = findViewById(R.id.relModDlvrInfo);
-        relHelp = findViewById(R.id.relHelp);
+        relMyDelivery = findViewById(R.id.relMyDelivery);
         relLogout = findViewById(R.id.relLogout);
         rbLastTimeStar = findViewById(R.id.rbLastTimeStar);
 
@@ -100,7 +96,7 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_stat_name);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         String dlvr_name = deliverVo.getDlvr_name();
         drawerDlvrName.setText(dlvr_name);
@@ -115,7 +111,7 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         btnMainToDelivery.setOnClickListener(this);
         relDlvrInfo.setOnClickListener(this);
         relModDlvrInfo.setOnClickListener(this);
-        relHelp.setOnClickListener(this);
+        relMyDelivery.setOnClickListener(this);
         relLogout.setOnClickListener(this);
         linTimeline.setOnClickListener(this);
         linDelivery.setOnClickListener(this);
@@ -161,21 +157,42 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case MOD_DLVR_INFO:
+                    String result = data.getStringExtra("result");
+                    if(result != null && result.equals("modify")) {
+                        Intent intent = new Intent(getApplicationContext(), Activity_Deliver_Main.class);
+                        finish();
+                        startActivity(intent);
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         Intent intent;
 
         switch (id) {
             case R.id.relDlvrInfo:
-                Toast.makeText(this, "내 정보 보기", Toast.LENGTH_SHORT).show();
                 intent = new Intent(getApplicationContext(), Activity_Deliver_MyPage.class);
-                startActivity(intent);
+                intent.putExtra("page", SHOW_DLVR_INFO);
+                startActivityForResult(intent, MOD_DLVR_INFO);
                 break;
             case R.id.relModDlvrInfo:
-                Toast.makeText(this, "정보 수정", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), Activity_Deliver_MyPage.class);
+                intent.putExtra("page", SHOW_MOD_DLVR);
+                startActivityForResult(intent, MOD_DLVR_INFO);
                 break;
-            case R.id.relHelp:
-                Toast.makeText(this, "도움 액티비티", Toast.LENGTH_SHORT).show();
+            case R.id.relMyDelivery:
+                intent = new Intent(getApplicationContext(), Activity_Deliver_MyPage.class);
+                intent.putExtra("page", SHOW_DELIVERY);
+                startActivityForResult(intent, MOD_DLVR_INFO);
                 break;
             case R.id.relLogout:
                 intent = new Intent(getApplicationContext(), Activity_Home.class);

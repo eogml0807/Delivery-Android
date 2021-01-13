@@ -334,8 +334,10 @@ public class Activity_Delivery extends AppCompatActivity
     private void showOrderInfo() {
         linOrderList.setVisibility(View.GONE);
         linOrderInfo.setVisibility(View.VISIBLE);
+        btnShowMessage.setVisibility(View.VISIBLE);
         btnShowOrderList.setText("주문 정보 보기");
 
+        stop = true;
         txtPickedOrderNo.setText(String.valueOf(pickedOrderVo.getOrder_no()));
         txtPickedUserName.setText(pickedOrderVo.getUser_name());
         double order_lat = pickedOrderVo.getOrder_lat();
@@ -347,11 +349,13 @@ public class Activity_Delivery extends AppCompatActivity
     }
 
     private void showOrderList() {
-        stop = false;
-        pickedOrderVo = null;
         linOrderList.setVisibility(View.VISIBLE);
         linOrderInfo.setVisibility(View.GONE);
+        btnShowMessage.setVisibility(View.GONE);
         btnShowOrderList.setText("주문 리스트 보기");
+
+        stop = false;
+        pickedOrderVo = null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -360,13 +364,6 @@ public class Activity_Delivery extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case PICK_ORDER:
-                    if (data != null) {
-                        pickedOrderVo = data.getParcelableExtra("orderVo");
-                        Log.d("orderVo", pickedOrderVo.toString());
-                        showOrderInfo();
-                    }
-                    break;
                 case MESSAGE_IMAGE:
                     msg_img = FileUploadUtil.getFile(this, data.getData());
                     if (FileUploadUtil.isImage(msg_img)) {

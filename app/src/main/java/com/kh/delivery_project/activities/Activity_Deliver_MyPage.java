@@ -1,6 +1,7 @@
 package com.kh.delivery_project.activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,9 +9,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -32,6 +36,7 @@ import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
+import com.kh.delivery_project.util.DeliveryUtil;
 import com.kh.delivery_project.util.FileUploadUtil;
 import com.kh.delivery_project.util.PreferenceManager;
 import com.kh.delivery_project.util.UrlImageUtil;
@@ -46,10 +51,10 @@ import java.util.Map;
 public class Activity_Deliver_MyPage extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, TextWatcher, Codes {
 
     Gson gson = new Gson();
+    Context context = this;
 
-    GridLayout MyGrid01;
-    LinearLayout MyLin01, MyLin02, MyLinMod01, MyLinMod02;
-    Button btnMyPageToHome, btnMyInfo, btnModMyInfo, btnModDlvrImg, btnModOk, btnDeleteAccount, btnMyOrderedList, btnModPrev, btnModNext, btnSeacrhModAddr, btnClearAddr, btnClearImg;
+    LinearLayout linMyInfo, linModifyInfo, linMyDelivery, MyLinMod01, MyLinMod02;
+    Button btnMyInfo, btnModMyInfo, btnModDlvrImg, btnModOk, btnDeleteAccount, btnMyOrderedList, btnModPrev, btnModNext, btnSeacrhModAddr, btnClearAddr, btnClearImg;
     EditText edtModDlvrPw, edtModDlvrPwDupl, edtModDlvrPhone, edtModDlvrEmail, edtModDlvrAddr, edtModDlvrDetailAddr;
     TextView txtMyDlvrId, txtMyDlvrName, txtMyDlvrPhone, txtMyDlvrEmail, txtMyDlvrAddr, txtMyDlvrPoint, txtMyDlvrRank, txtChkModDlvrPwForm, txtChkModDlvrPwDupl, txtChkModDlvrEmailForm, txtChkModDlvrPhoneForm;
     ImageView ivMyDlvrImg, ivModDlvrImg;
@@ -76,42 +81,12 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         setListView();
     }
 
-    private void getCompletedOrder() {
-        String url = "/order/android/getCompletedOrder";
-        ContentValues params = new ContentValues();
-        params.put("dlvr_no", deliverVo.getDlvr_no());
-        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
-        for(int i = 0; i < list.size(); i++) {
-            Map<String, Object> map = list.get(i);
-            OrderVo orderVo = ConvertUtil.getOrderVo(map);
-            orderList.add(orderVo);
-        }
-    }
-
-    private void setListView() {
-        if(orderList != null) {
-            Adapter_MyOrderedList adapter = new Adapter_MyOrderedList(this, R.layout.view_myorderedlist, orderList);
-            lvMyOrderedList.setAdapter(adapter);
-        }
-    }
-
-    private void setTexts() {
-        txtMyDlvrId.setText(deliverVo.getDlvr_id());
-        txtMyDlvrName.setText(deliverVo.getDlvr_name());
-        txtMyDlvrPhone.setText(deliverVo.getDlvr_phone());
-        txtMyDlvrEmail.setText(deliverVo.getDlvr_email());
-        txtMyDlvrAddr.setText(deliverVo.getDlvr_addr());
-        txtMyDlvrPoint.setText(String.valueOf(deliverVo.getDlvr_point()));
-        txtMyDlvrRank.setText(deliverVo.getDlvr_rank());
-    }
-
     private void setViews() {
-        MyGrid01 = findViewById(R.id.MyGrid01);
-        MyLin01 = findViewById(R.id.MyLin01);
-        MyLin02 = findViewById(R.id.MyLin02);
+        linMyInfo = findViewById(R.id.linMyInfo);
+        linModifyInfo = findViewById(R.id.linModifyInfo);
+        linMyDelivery = findViewById(R.id.linMyDelivery);
         MyLinMod01 = findViewById(R.id.MyLinMod01);
         MyLinMod02 = findViewById(R.id.MyLinMod02);
-        btnMyPageToHome = findViewById(R.id.btnMyPageToHome);
         btnMyInfo = findViewById(R.id.btnMyInfo);
         btnModMyInfo = findViewById(R.id.btnModMyInfo);
         btnModDlvrImg = findViewById(R.id.btnModDlvrImg);
@@ -147,10 +122,26 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         String imgUrl = IMAGE_ADDRESS + deliverVo.getDlvr_img();
         UrlImageUtil urlImageUtil = new UrlImageUtil(imgUrl, ivMyDlvrImg);
         urlImageUtil.execute();
+
+        Intent intent = getIntent();
+        int page = intent.getIntExtra("page", 0);
+        switch (page) {
+            case SHOW_DLVR_INFO:
+                setFrame();
+                linMyInfo.setVisibility(View.VISIBLE);
+                break;
+            case SHOW_MOD_DLVR:
+                setFrame();
+                linModifyInfo.setVisibility(View.VISIBLE);
+                break;
+            case SHOW_DELIVERY:
+                setFrame();
+                linMyDelivery.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     private void setListeners() {
-        btnMyPageToHome.setOnClickListener(this);
         btnMyInfo.setOnClickListener(this);
         btnModMyInfo.setOnClickListener(this);
         btnModDlvrImg.setOnClickListener(this);
@@ -170,12 +161,47 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         edtModDlvrPwDupl.addTextChangedListener(this);
         edtModDlvrPhone.addTextChangedListener(this);
         edtModDlvrEmail.addTextChangedListener(this);
+//        lvMyOrderedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                OrderVo orderVo = orderList.get(position);
+//            }
+//        });
+    }
+
+    private void getCompletedOrder() {
+        String url = "/order/android/getCompletedOrder";
+        ContentValues params = new ContentValues();
+        params.put("dlvr_no", deliverVo.getDlvr_no());
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
+        for(int i = 0; i < list.size(); i++) {
+            Map<String, Object> map = list.get(i);
+            OrderVo orderVo = ConvertUtil.getOrderVo(map);
+            orderList.add(orderVo);
+        }
+    }
+
+    private void setTexts() {
+        txtMyDlvrId.setText(deliverVo.getDlvr_id());
+        txtMyDlvrName.setText(deliverVo.getDlvr_name());
+        txtMyDlvrPhone.setText(deliverVo.getDlvr_phone());
+        txtMyDlvrEmail.setText(deliverVo.getDlvr_email());
+        txtMyDlvrAddr.setText(deliverVo.getDlvr_addr());
+        txtMyDlvrPoint.setText(String.valueOf(deliverVo.getDlvr_point()));
+        txtMyDlvrRank.setText(deliverVo.getDlvr_rank());
+    }
+
+    private void setListView() {
+        if(orderList != null) {
+            Adapter_MyOrderedList adapter = new Adapter_MyOrderedList(this, R.layout.view_myorderedlist, orderList);
+            lvMyOrderedList.setAdapter(adapter);
+        }
     }
 
     private void setFrame() {
-        MyGrid01.setVisibility(View.INVISIBLE);
-        MyLin01.setVisibility(View.INVISIBLE);
-        MyLin02.setVisibility(View.INVISIBLE);
+        linMyInfo.setVisibility(View.GONE);
+        linModifyInfo.setVisibility(View.GONE);
+        linMyDelivery.setVisibility(View.GONE);
     }
 
     private boolean showImage(Uri uri, File file, ImageView iv) {
@@ -220,16 +246,23 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
             if(modImg != null) {
                 FileUploadUtil.modify(this, modImg, deliverVo.getDlvr_img(), modVals[4]);
             }
-            Toast.makeText(this, "수정 성공", Toast.LENGTH_SHORT).show();
-            deliverVo.setDlvr_pw(modVals[0]);
-            deliverVo.setDlvr_phone(modVals[1]);
-            deliverVo.setDlvr_email(modVals[2]);
-            deliverVo.setDlvr_addr(modVals[3]);
-            deliverVo.setDlvr_img(modVals[4]);
-            Intent intent = new Intent(getApplicationContext(), Activity_Deliver_MyPage.class);
-            intent.putExtra("deliverVo", deliverVo);
-            finish();
-            startActivity(intent);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "수정 성공", Toast.LENGTH_SHORT).show();
+                    deliverVo.setDlvr_pw(modVals[0]);
+                    deliverVo.setDlvr_phone(modVals[1]);
+                    deliverVo.setDlvr_email(modVals[2]);
+                    deliverVo.setDlvr_addr(modVals[3]);
+                    deliverVo.setDlvr_img(modVals[4]);
+                    PreferenceManager.setDeliverVo(context, deliverVo);
+                    Intent intent = new Intent(getApplicationContext(), Activity_Deliver_Main.class);
+                    intent.putExtra("result", "modify");
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }, 3000);
         } else {
             Toast.makeText(this, "수정 실패", Toast.LENGTH_SHORT).show();
         }
@@ -263,23 +296,20 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        Intent intent = null;
+        Intent intent;
 
         switch (id) {
-            case R.id.btnMyPageToHome:
-                finish();
-                break;
             case R.id.btnMyInfo:
                 setFrame();
-                MyGrid01.setVisibility(View.VISIBLE);
+                linMyInfo.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnModMyInfo:
                 setFrame();
-                MyLin01.setVisibility(View.VISIBLE);
+                linModifyInfo.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnMyOrderedList:
                 setFrame();
-                MyLin02.setVisibility(View.VISIBLE);
+                linMyDelivery.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnModDlvrImg:
                 intent = new Intent();
@@ -299,10 +329,14 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
             case R.id.btnModPrev:
                 MyLinMod01.setVisibility(View.VISIBLE);
                 MyLinMod02.setVisibility(View.INVISIBLE);
+                btnModNext.setVisibility(View.VISIBLE);
+                btnModPrev.setVisibility(View.GONE);
                 break;
             case R.id.btnModNext:
                 MyLinMod01.setVisibility(View.INVISIBLE);
                 MyLinMod02.setVisibility(View.VISIBLE);
+                btnModNext.setVisibility(View.GONE);
+                btnModPrev.setVisibility(View.VISIBLE);
                 break;
             case R.id.btnSeacrhModAddr:
                 intent = new Intent(getApplicationContext(), Activity_WebView.class);
@@ -336,7 +370,7 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         switch (focusedId) {
             case R.id.edtModDlvrPw:
                 if(string.length() == 0) {
-                    txtChkModDlvrPwForm.setText("비밀번호 형식 확인");
+                    txtChkModDlvrPwForm.setText("");
                     txtChkModDlvrPwForm.setTextColor(Color.BLACK);
                 } else if(string.length() < 8) {
                     txtChkModDlvrPwForm.setText("비밀번호는 8자리 이상");
@@ -359,19 +393,21 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
                 }
                 break;
             case R.id.edtModDlvrPwDupl:
-                if(string.length() == 0) {
-                    txtChkModDlvrPwDupl.setText("비밀번호 일치 확인");
-                    txtChkModDlvrPwDupl.setTextColor(Color.BLACK);
-                    modVals[0] = deliverVo.getDlvr_pw();
-                } else if(txtChkModDlvrPwForm.getText().toString().equals("옳은 비밀번호")) {
-                    String password = edtModDlvrPw.getText().toString();
-                    if(string.equals(password)) {
-                        txtChkModDlvrPwDupl.setText("비밀번호 일치");
-                        txtChkModDlvrPwDupl.setTextColor(Color.BLUE);
-                        modVals[0] = string;
+                if(txtChkModDlvrPwForm.getText().toString().equals("옳은 비밀번호")) {
+                    if(string.length() == 0) {
+                        txtChkModDlvrPwDupl.setText("");
+                        txtChkModDlvrPwDupl.setTextColor(Color.BLACK);
+                        modVals[0] = deliverVo.getDlvr_pw();
                     } else {
-                        txtChkModDlvrPwDupl.setText("비밀번호 불일치");
-                        txtChkModDlvrPwDupl.setTextColor(Color.RED);
+                        String password = edtModDlvrPw.getText().toString();
+                        if(string.equals(password)) {
+                            txtChkModDlvrPwDupl.setText("비밀번호 일치");
+                            txtChkModDlvrPwDupl.setTextColor(Color.BLUE);
+                            modVals[0] = string;
+                        } else {
+                            txtChkModDlvrPwDupl.setText("비밀번호 불일치");
+                            txtChkModDlvrPwDupl.setTextColor(Color.RED);
+                        }
                     }
                 } else {
                     txtChkModDlvrPwDupl.setText("비밀번호부터 맞게 입력해라");
@@ -380,7 +416,7 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
                 break;
             case R.id.edtModDlvrPhone:
                 if(string.length() == 0) {
-                    txtChkModDlvrPhoneForm.setText("전화번호 형식 확인");
+                    txtChkModDlvrPhoneForm.setText("");
                     txtChkModDlvrPhoneForm.setTextColor(Color.BLACK);
                     modVals[1] = deliverVo.getDlvr_phone();
                 } else if(string.length() >= 9) {
@@ -394,7 +430,7 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
                 break;
             case R.id.edtModDlvrEmail:
                 if(string.length() == 0) {
-                    txtChkModDlvrEmailForm.setText("이메일 형식 확인");
+                    txtChkModDlvrEmailForm.setText("");
                     txtChkModDlvrEmailForm.setTextColor(Color.BLACK);
                     modVals[2] = deliverVo.getDlvr_email();
                 } else if(string.contains("@") && string.contains(".") &&

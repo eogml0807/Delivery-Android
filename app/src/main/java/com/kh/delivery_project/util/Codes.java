@@ -6,32 +6,32 @@ public interface Codes {
     int PREMISSIONS = 1000;
     // permission 관련 끝
 
-    // intent 관련
-    // 회원가입
+    // 회원가입 관련
     int ACTIVITY_DELIVER_REGIST = 10000;
     int REGIST_DLVR_IMG = 10001;
     int REGIST_DLVR_IDCARD = 10002;
     int REGIST_DLVR_BIRTH = 10003;
     int REGIST_DLVR_ADDR = 10004;
-    // 회원가입 관련 끝
 
-    // 회원정보 수정
-    int MOD_DLVR_IMG = 10101;
-    int MOD_DLVR_ADDR = 10102;
+    // 회원정보
+    int SHOW_DLVR_INFO = 10100;
+    int SHOW_MOD_DLVR = 10101;
+    int SHOW_DELIVERY = 10102;
+    int MOD_DLVR_INFO = 10110;
+    int MOD_DLVR_IMG = 10111;
+    int MOD_DLVR_ADDR = 10112;
 
     // 배달 관련
-    int PICK_ORDER = 10201;
+    int PICK_ORDER = 10200;
+    int MESSAGE_IMAGE = 10201;
 
     // 타임라인 관련
-    int WRITE_TIME_IMG = 10301;
-    int MOD_TIME_IMG = 10302;
-
-    int ALL_TIMELINE = 410;
-    int NOTICE_TIMELINE = 411;
-    int REVIEW_TIMELINE = 412;
-    int FREE_TIMELINE = 413;
-
-    int MESSAGE_IMAGE = 10401;
+    int ALL_TIMELINE = 10300;
+    int NOTICE_TIMELINE = 10301;
+    int REVIEW_TIMELINE = 10302;
+    int FREE_TIMELINE = 10303;
+    int WRITE_TIME_IMG = 10310;
+    int MOD_TIME_IMG = 10311;
 
     // s3 관련
     // 이미지 앞주소

@@ -2,6 +2,7 @@ package com.kh.delivery_project.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.kh.delivery_project.domain.DeliverVo;
 
@@ -59,8 +60,8 @@ public class PreferenceManager {
         }
         deliverVo.setDlvr_state(pref.getString("dlvr_state", ""));
         deliverVo.setDlvr_point(pref.getInt("dlvr_point", 0));
-        deliverVo.setDlvr_id(pref.getString("dlvr_rank", ""));
-        deliverVo.setDlvr_id(pref.getString("account_state", ""));
+        deliverVo.setDlvr_rank(pref.getString("dlvr_rank", ""));
+        deliverVo.setAccount_state(pref.getString("account_state", ""));
         return deliverVo;
     }
 

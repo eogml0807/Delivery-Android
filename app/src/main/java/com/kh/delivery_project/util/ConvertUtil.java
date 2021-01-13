@@ -67,6 +67,10 @@ public class ConvertUtil {
             if(map.get("user_name") != null) {
                 orderVo.setUser_name((String) map.get("user_name"));
             }
+            orderVo.setUser_name((String) map.get("user_name"));
+            orderVo.setDlvr_name((String) map.get("dlvr_name"));
+            orderVo.setCode_detail((String) map.get("code_detail"));
+            orderVo.setTime_star((int) (double) map.get("time_star"));
             return orderVo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,9 +110,11 @@ public class ConvertUtil {
             timelineVo.setTime_date(getDate((String) map.get("time_date")));
             timelineVo.setTime_state((String) map.get("time_state"));
             timelineVo.setTime_star((double) map.get("time_star"));
+            timelineVo.setTime_like((int) (double) map.get("time_like"));
             timelineVo.setDlvr_no((int) (double) map.get("dlvr_no"));
             timelineVo.setWriter_name((String) map.get("writer_name"));
             timelineVo.setDlvr_name((String) map.get("dlvr_name"));
+            timelineVo.setWriter_img((String) map.get("writer_img"));
             return timelineVo;
         } catch (Exception e) {
             e.printStackTrace();

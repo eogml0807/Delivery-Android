@@ -39,7 +39,10 @@
             android:parentActivityName=".activities.Activity_Home"
             android:theme="@style/ActionBar" />
         <activity android:name=".activities.Activity_Deliver_Main" />
-        <activity android:name=".activities.Activity_Deliver_MyPage" />
+        <activity
+            android:name=".activities.Activity_Deliver_MyPage"
+            android:parentActivityName=".activities.Activity_Deliver_Main"
+            android:theme="@style/CustomDialog" />
         <activity
             android:name=".activities.Activity_Delivery"
             android:parentActivityName=".activities.Activity_Deliver_Main"
@@ -47,6 +50,10 @@
         <activity
             android:name=".activities.Activity_Timeline"
             android:parentActivityName=".activities.Activity_Deliver_Main"
+            android:theme="@style/CustomDialog" />
+        <activity
+            android:name=".activities.Activity_TimelineInfo"
+            android:parentActivityName=".activities.Activity_Timeline"
             android:theme="@style/CustomDialog" />
         <activity android:name=".activities.Activity_WebView" />
 

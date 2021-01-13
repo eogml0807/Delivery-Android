@@ -23,6 +23,7 @@ public class OrderVo implements Parcelable {
     private String user_name;
     private String code_detail;
     private String dlvr_name;
+    private int time_star;
 
     public OrderVo() {
     }
@@ -41,6 +42,7 @@ public class OrderVo implements Parcelable {
         user_name = in.readString();
         code_detail = in.readString();
         dlvr_name = in.readString();
+        time_star = in.readInt();
     }
 
     public static final Creator<OrderVo> CREATOR = new Creator<OrderVo>() {
@@ -54,6 +56,14 @@ public class OrderVo implements Parcelable {
             return new OrderVo[size];
         }
     };
+
+    public int getTime_star() {
+        return time_star;
+    }
+
+    public void setTime_star(int time_star) {
+        this.time_star = time_star;
+    }
 
     public int getOrder_no() {
         return order_no;
@@ -184,6 +194,7 @@ public class OrderVo implements Parcelable {
                 ", user_name='" + user_name + '\'' +
                 ", code_detail='" + code_detail + '\'' +
                 ", dlvr_name='" + dlvr_name + '\'' +
+                ", time_star=" + time_star +
                 '}';
     }
 
@@ -207,5 +218,6 @@ public class OrderVo implements Parcelable {
         dest.writeString(user_name);
         dest.writeString(code_detail);
         dest.writeString(dlvr_name);
+        dest.writeInt(time_star);
     }
 }

@@ -430,7 +430,10 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final TimelineVo timelineVo = timelineList.get(position);
-        openDialog(timelineVo);
+        Intent intent = new Intent(getApplicationContext(), Activity_TimelineInfo.class);
+        intent.putExtra("time_no", timelineVo.getTime_no());
+        startActivity(intent);
+//        openDialog(timelineVo);
     }
 
     @Override

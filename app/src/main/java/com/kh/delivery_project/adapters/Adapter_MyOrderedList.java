@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.kh.delivery_project.R;
 import com.kh.delivery_project.domain.OrderVo;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class Adapter_MyOrderedList extends BaseAdapter {
@@ -44,17 +47,21 @@ public class Adapter_MyOrderedList extends BaseAdapter {
             convertView = View.inflate(context, layout, null);
         }
 
-        TextView txtMyOrderNo, txtMyOrderCa, txtMyOrderDate, txtMyOrderCost;
+        TextView txtMyOrderNo, txtMyOrderReq, txtMyOrderDate, txtMyOrderState;
         txtMyOrderNo = convertView.findViewById(R.id.txtMyOrderNo);
-        txtMyOrderCa = convertView.findViewById(R.id.txtMyOrderCa);
+        txtMyOrderReq = convertView.findViewById(R.id.txtMyOrderReq);
         txtMyOrderDate = convertView.findViewById(R.id.txtMyOrderDate);
-        txtMyOrderCost = convertView.findViewById(R.id.txtMyOrderCost);
+        txtMyOrderState = convertView.findViewById(R.id.txtMyOrderState);
 
         OrderVo orderVo = orderList.get(position);
 
         txtMyOrderNo.setText(String.valueOf(orderVo.getOrder_no()));
-        txtMyOrderCa.setText(orderVo.getOrder_ca());
-        txtMyOrderDate.setText(orderVo.getOrder_date().toString());
+        txtMyOrderReq.setText(orderVo.getOrder_req());
+        Timestamp order_date = orderVo.getOrder_date();
+        DateFormat df = new SimpleDateFormat("yy-MM-dd HH:mm");
+        String str_order_date = df.format(order_date);
+        txtMyOrderDate.setText(str_order_date);
+        txtMyOrderState.setText(orderVo.getCode_detail());
 
         return convertView;
     }

@@ -16,10 +16,13 @@ public class TimelineVo implements Parcelable {
     private String time_state;
     private double time_star;
     private int dlvr_no;
+    private String time_location;
 
     // 조인 컬럼
+    private int time_like;
     private String writer_name;
     private String dlvr_name;
+    private String writer_img;
 
     public TimelineVo() {
     }
@@ -33,8 +36,11 @@ public class TimelineVo implements Parcelable {
         time_state = in.readString();
         time_star = in.readDouble();
         dlvr_no = in.readInt();
+        time_location = in.readString();
+        time_like = in.readInt();
         writer_name = in.readString();
         dlvr_name = in.readString();
+        writer_img = in.readString();
     }
 
     @Override
@@ -47,8 +53,11 @@ public class TimelineVo implements Parcelable {
         dest.writeString(time_state);
         dest.writeDouble(time_star);
         dest.writeInt(dlvr_no);
+        dest.writeString(time_location);
+        dest.writeInt(time_like);
         dest.writeString(writer_name);
         dest.writeString(dlvr_name);
+        dest.writeString(writer_img);
     }
 
     @Override
@@ -140,6 +149,22 @@ public class TimelineVo implements Parcelable {
         this.dlvr_no = dlvr_no;
     }
 
+    public String getTime_location() {
+        return time_location;
+    }
+
+    public void setTime_location(String time_location) {
+        this.time_location = time_location;
+    }
+
+    public int getTime_like() {
+        return time_like;
+    }
+
+    public void setTime_like(int time_like) {
+        this.time_like = time_like;
+    }
+
     public String getWriter_name() {
         return writer_name;
     }
@@ -156,6 +181,14 @@ public class TimelineVo implements Parcelable {
         this.dlvr_name = dlvr_name;
     }
 
+    public String getWriter_img() {
+        return writer_img;
+    }
+
+    public void setWriter_img(String writer_img) {
+        this.writer_img = writer_img;
+    }
+
     @Override
     public String toString() {
         return "TimelineVo{" +
@@ -168,8 +201,11 @@ public class TimelineVo implements Parcelable {
                 ", time_state='" + time_state + '\'' +
                 ", time_star=" + time_star +
                 ", dlvr_no=" + dlvr_no +
+                ", time_location='" + time_location + '\'' +
+                ", time_like=" + time_like +
                 ", writer_name='" + writer_name + '\'' +
                 ", dlvr_name='" + dlvr_name + '\'' +
+                ", writer_img='" + writer_img + '\'' +
                 '}';
     }
 }
