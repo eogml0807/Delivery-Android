@@ -3,6 +3,7 @@ package com.kh.delivery_project.util;
 import android.location.Address;
 import android.util.Log;
 
+import com.kh.delivery_project.domain.CommentVo;
 import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.MessageVo;
 import com.kh.delivery_project.domain.OrderVo;
@@ -135,6 +136,23 @@ public class ConvertUtil {
             messageVo.setSender_name((String) map.get("sender_name"));
             messageVo.setSender_img((String) map.get("sender_img"));
             return messageVo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static CommentVo getCommentVo(Map<String, Object> map) {
+        try {
+            CommentVo commentVo = new CommentVo();
+            commentVo.setC_no((int) (double) map.get("c_no"));
+            commentVo.setC_content((String) map.get("c_content"));
+            commentVo.setC_date(getDate((String) map.get("c_date")));
+            commentVo.setTime_no((int) (double) map.get("time_no"));
+            commentVo.setWriter_no((int) (double) map.get("writer_no"));
+            commentVo.setWriter_name((String) map.get("writer_name"));
+            commentVo.setWriter_img((String) map.get("writer_img"));
+            return commentVo;
         } catch (Exception e) {
             e.printStackTrace();
         }

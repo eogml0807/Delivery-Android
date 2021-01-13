@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.kh.delivery_project.R;
+import com.kh.delivery_project.adapters.Adapter_CommentList;
 import com.kh.delivery_project.connection.ConnectServer;
+import com.kh.delivery_project.domain.CommentVo;
 import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.TimelineVo;
 import com.kh.delivery_project.util.Codes;
@@ -26,6 +28,7 @@ import com.kh.delivery_project.util.UrlImageUtil;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 public class Activity_TimelineInfo extends AppCompatActivity implements Codes, View.OnClickListener {
@@ -39,6 +42,7 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
 
     DeliverVo deliverVo;
     TimelineVo timelineVo;
+    List<CommentVo> commentList;
 
     boolean isLike = false;
 
@@ -49,10 +53,29 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         deliverVo = PreferenceManager.getDeliverVo(this);
         setTitle("게시글 정보");
         setTimelineVo();
+        setCommentList();
         isLike();
         setViews();
         setListeners();
+        setListView();
     }
+
+    private void setCommentList() {
+        String url = "/comment/getCommentList";
+        url += "/" + timelineVo.getTime_no();
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url), List.class);
+        for(int i = 0; i < list.size(); i++) {
+            Map<String, Object> map = list.get(i);
+            CommentVo commentVo = ConvertUtil.getCommentVo(map);
+            commentList.add(commentVo);
+        }
+    }
+
+    private void setListView() {
+        Adapter_CommentList adapter = new Adapter_CommentList(this, R.layout.view_commentlist, commentList);
+        lvCommentList.setAdapter(adapter);
+    }
+
 
     private void setTimelineVo() {
         Intent intent = getIntent();
