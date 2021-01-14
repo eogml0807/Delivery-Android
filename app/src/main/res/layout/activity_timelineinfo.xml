@@ -80,11 +80,41 @@
                 android:layout_below="@+id/txtTimeContent"
                 android:layout_centerHorizontal="true" />
 
+            <LinearLayout
+                android:id="@+id/linComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivTimeImg"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="#DAF7A6"
+                    android:hint="댓글 작성"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btnInsertComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="작성" />
+
+            </LinearLayout>
+
+
             <ListView
                 android:id="@+id/lvCommentList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivTimeImg" />
+                android:layout_below="@+id/linComment" />
 
         </RelativeLayout>
     </ScrollView>

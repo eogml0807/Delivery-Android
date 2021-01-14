@@ -72,10 +72,12 @@ public class Adapter_Message extends BaseAdapter implements Codes {
         UrlImageUtil urlImageUtil = new UrlImageUtil(urlStr, civSenderImg);
         urlImageUtil.execute();
 
+
         TextView txtSenderName = messageView.findViewById(R.id.txtSenderName);
         txtSenderName.setText(messageVo.getSender_name());
 
         TextView txtSenderMsg;
+
         ImageView ivMsgImg;
         if(messageVo.getMsg_img() == null) {
             txtSenderMsg = messageView.findViewById(R.id.txtSenderMsg);

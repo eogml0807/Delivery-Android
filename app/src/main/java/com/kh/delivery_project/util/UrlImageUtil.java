@@ -3,6 +3,7 @@ package com.kh.delivery_project.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.net.URL;
@@ -28,16 +29,14 @@ public class UrlImageUtil extends AsyncTask<Void, Void, Bitmap> {
     protected Bitmap doInBackground(Void... voids) {
         Bitmap bitmap = null;
         try {
-            if(bitmapHash.containsKey(urlStr)) {
-                Bitmap oldbitmap = bitmapHash.remove(urlStr);
-                if(oldbitmap != null) {
-                    oldbitmap = null;
-                }
-            }
-            URL url = new URL(urlStr);
-            bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            if (!bitmapHash.containsKey(urlStr)) {
+                URL url = new URL(urlStr);
+                bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
-            bitmapHash.put(urlStr, bitmap);
+                bitmapHash.put(urlStr, bitmap);
+            } else {
+                bitmap = bitmapHash.get(urlStr);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,8 +51,7 @@ public class UrlImageUtil extends AsyncTask<Void, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
-
         imageView.setImageBitmap(bitmap);
-        imageView.invalidate();
     }
+
 }

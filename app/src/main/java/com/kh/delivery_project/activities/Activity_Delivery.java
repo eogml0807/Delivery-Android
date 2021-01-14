@@ -91,6 +91,7 @@ public class Activity_Delivery extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
+        mapView = new MapView(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         deliverVo = PreferenceManager.getDeliverVo(this);
         setViews();
@@ -107,7 +108,7 @@ public class Activity_Delivery extends AppCompatActivity
     }
 
     private void setViews() {
-        mapView = new MapView(this);
+
         btnShowOrderList = findViewById(R.id.btnShowOrderList);
         btnShowMap = findViewById(R.id.btnShowMap);
         btnDeliveryComplete = findViewById(R.id.btnDeliveryComplete);

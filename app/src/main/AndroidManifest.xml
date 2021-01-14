@@ -54,6 +54,7 @@
         <activity
             android:name=".activities.Activity_TimelineInfo"
             android:parentActivityName=".activities.Activity_Timeline"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/CustomDialog" />
         <activity android:name=".activities.Activity_WebView" />
 
