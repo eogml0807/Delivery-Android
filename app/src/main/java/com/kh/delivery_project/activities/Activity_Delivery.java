@@ -77,7 +77,7 @@ public class Activity_Delivery extends AppCompatActivity
     DeliverVo deliverVo;
     OrderVo pickedOrderVo;
     List<OrderVo> orderList = new ArrayList<>();
-    List<MessageVo> messageList = new ArrayList<>();
+    List<MessageVo> messageList;
     Adapter_Message adapter;
     MessageThread thread = new MessageThread();
 
@@ -186,6 +186,7 @@ public class Activity_Delivery extends AppCompatActivity
         ContentValues params = new ContentValues();
         params.put("order_no", pickedOrderVo.getOrder_no());
         List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
+        messageList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, Object> map = list.get(i);
             MessageVo messageVo = ConvertUtil.getMessageVo(map);
@@ -198,7 +199,9 @@ public class Activity_Delivery extends AppCompatActivity
 
         adapter = new Adapter_Message(messageList, deliverVo, getLayoutInflater());
         lvMessage.setAdapter(adapter);
-        thread.start();
+        if(thread.isAlive()) {
+            thread.start();
+        }
     }
 
     public void getCurrentMessage() {
@@ -357,6 +360,8 @@ public class Activity_Delivery extends AppCompatActivity
 
         stop = false;
         pickedOrderVo = null;
+        messageList = null;
+        lvMessage.setAdapter(null);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

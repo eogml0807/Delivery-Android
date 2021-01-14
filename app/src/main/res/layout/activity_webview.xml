@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".activities.Activity_WebView">
 
+<!--    다음 주소 검색 API-->
+
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"

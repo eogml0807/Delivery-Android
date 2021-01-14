@@ -5,24 +5,27 @@
     android:background="#f4f4f4"
     android:padding="15dp">
 
+    <!--    대표 이미지-->
     <ImageView
         android:id="@+id/ivMainPage"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:src="@drawable/main" />
+    <!--    대표 이미지 끝-->
 
+    <!--    아이디 비밀번호 입력-->
     <EditText
         android:id="@+id/edtLoginDlvrId"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/ivMainPage"
-        android:background="#FFDED7"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:background="#FFDED7"
+        android:hint="아이디"
         android:inputType="text"
         android:maxLines="1"
-        android:nextFocusDown="@id/edtLoginDlvrPw"
-        android:hint="아이디" />
+        android:nextFocusDown="@id/edtLoginDlvrPw" />
 
     <EditText
         android:id="@+id/edtLoginDlvrPw"
@@ -30,10 +33,12 @@
         android:layout_height="50dp"
         android:layout_below="@+id/edtLoginDlvrId"
         android:background="#FFDED7"
+        android:hint="비밀번호"
         android:inputType="textPassword"
-        android:maxLines="1"
-        android:hint="비밀번호" />
+        android:maxLines="1" />
+    <!--    아이디 비밀번호 입력 끝-->
 
+    <!--    로그인 / 회원 가입 / 계정 찾기-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,9 +49,9 @@
             android:id="@+id/chkLoginAuto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="자동 로그인"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:text="자동 로그인" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -68,20 +73,22 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="회원 가입"
-                android:textSize="15dp"
                 android:textColor="#0000f0"
-                android:layout_weight="1"/>
+                android:textSize="15dp" />
+
             <Button
                 android:id="@+id/btnFindAccount"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="아이디/비밀번호 찾기"
-                android:textSize="15dp"
                 android:textColor="#0000f0"
-                android:layout_weight="1"/>
+                android:textSize="15dp" />
 
         </LinearLayout>
     </LinearLayout>
+    <!--    로그인 / 회원 가입 / 계정 찾기 끝-->
 </RelativeLayout>

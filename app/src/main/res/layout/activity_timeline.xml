@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <!--    타임라인 작성-->
     <Button
         android:id="@+id/btnToggleWriteForm"
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
         <Spinner
             android:id="@+id/boardSpinner"
             android:layout_width="100dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp" />
 
     </LinearLayout>
 
@@ -28,8 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,13 +53,13 @@
                 <ImageView
                     android:id="@+id/ivWriteImg"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"/>
+                    android:layout_height="200dp" />
 
                 <Button
                     android:id="@+id/btnSelectImg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="사진 첨부"/>
+                    android:text="사진 첨부" />
             </LinearLayout>
         </LinearLayout>
 
@@ -69,7 +70,9 @@
             android:text="작성 완료" />
 
     </LinearLayout>
+    <!--    타임라인 작성 끝-->
 
+    <!--    타임라인 리스트-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,8 +89,8 @@
             android:id="@+id/boardListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/boardProgressbar"/>
+            android:layout_above="@+id/boardProgressbar" />
 
     </RelativeLayout>
-
+    <!--    타임라인 리스트 끝-->
 </LinearLayout>

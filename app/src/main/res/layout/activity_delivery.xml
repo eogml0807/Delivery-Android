@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.kh.delivery_project.activities.Activity_Delivery">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:padding="10dp">
 
+        <!--        카카오 맵-->
         <LinearLayout
             android:id="@+id/linMap"
             android:layout_width="match_parent"
@@ -26,13 +25,16 @@
                 android:visibility="visible" />
 
         </LinearLayout>
+        <!--        카카오 맵 끝-->
 
+        <!--        배달 정보 / 배달 리스트-->
         <FrameLayout
             android:id="@+id/frmOrder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
 
+            <!--            배달 리스트-->
             <LinearLayout
                 android:id="@+id/linOrderList"
                 android:layout_width="match_parent"
@@ -53,13 +55,15 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
+            <!--            배달 리스트 끝-->
 
+            <!--            배달 정보-->
             <LinearLayout
                 android:id="@+id/linOrderInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <RelativeLayout
@@ -72,9 +76,9 @@
                         android:layout_height="100dp"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:textSize="35dp"
                         android:gravity="center"
-                        android:text="주문 정보" />
+                        android:text="주문 정보"
+                        android:textSize="35dp" />
 
                     <LinearLayout
                         android:id="@+id/linOrderNo"
@@ -210,8 +214,11 @@
                 </RelativeLayout>
 
             </LinearLayout>
+            <!--            배달 정보 끝-->
         </FrameLayout>
+        <!--        배달 정보 / 배달 리스트 끝-->
 
+        <!--        메시지-->
         <LinearLayout
             android:id="@+id/linMessage"
             android:layout_width="match_parent"
@@ -261,9 +268,11 @@
             </LinearLayout>
 
         </LinearLayout>
+        <!--        메시지 끝-->
 
     </FrameLayout>
 
+    <!--    페이지 버튼-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -278,6 +287,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="3dp"
             android:layout_weight="1"
+            android:background="#B8CAEF"
             android:text="주문 정보 보기" />
 
         <Button
@@ -287,16 +297,20 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_weight="1"
+            android:background="#B8CAEF"
             android:text="지도 보기" />
 
         <Button
             android:id="@+id/btnShowMessage"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:layout_weight="1"
-            android:text="채팅창 보기" />
+            android:background="#B8CAEF"
+            android:text="채팅창 보기"
+            android:visibility="gone" />
 
     </LinearLayout>
+    <!--    페이지 버튼 끝-->
+
 </LinearLayout>

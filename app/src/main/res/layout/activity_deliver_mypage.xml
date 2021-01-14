@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <!--        버튼 레이아웃-->
         <LinearLayout
             android:layout_width="50dp"
             android:layout_height="match_parent"
@@ -34,27 +35,30 @@
                 android:text="내 정보 수정" />
 
         </LinearLayout>
+        <!--        버튼 레이아웃 끝-->
 
+        <!--        페이지 레이아웃-->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!--            내 정보 페이지-->
             <LinearLayout
                 android:id="@+id/linMyInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
                 android:orientation="vertical"
+                android:padding="10dp"
                 android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/ivMyDlvrImg"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_marginBottom="20dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -204,21 +208,23 @@
                 </LinearLayout>
 
             </LinearLayout>
+            <!--            내 정보 페이지 끝-->
 
+            <!--            내 정보 수정 페이지-->
             <LinearLayout
                 android:id="@+id/linModifyInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:textSize="20dp"
-                    android:text="작성한 부분만 변경됩니다"/>
+                    android:text="작성한 부분만 변경됩니다"
+                    android:textSize="20dp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -297,8 +303,8 @@
                             android:layout_marginBottom="5dp"
                             android:background="#DEFFDA"
                             android:editable="false"
-                            android:inputType="text"
-                            android:hint="주소 검색을 해주세요"/>
+                            android:hint="주소 검색을 해주세요"
+                            android:inputType="text" />
 
                         <EditText
                             android:id="@+id/edtModDlvrDetailAddr"
@@ -334,7 +340,7 @@
                             android:id="@+id/ivModDlvrImg"
                             android:layout_width="300dp"
                             android:layout_height="350dp"
-                            android:layout_gravity="center_horizontal"/>
+                            android:layout_gravity="center_horizontal" />
 
                         <Button
                             android:id="@+id/btnClearImg"
@@ -350,9 +356,9 @@
                     android:id="@+id/btnModNext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="다음"
                     android:layout_marginLeft="7dp"
                     android:layout_marginRight="7dp"
+                    android:text="다음"
                     android:visibility="visible" />
 
                 <Button
@@ -386,7 +392,9 @@
                         android:text="계정 탈퇴" />
                 </LinearLayout>
             </LinearLayout>
+            <!--            내 정보 수정 페이지 끝-->
 
+            <!--            내 배달 내역 페이지-->
             <LinearLayout
                 android:id="@+id/linMyDelivery"
                 android:layout_width="match_parent"
@@ -437,8 +445,9 @@
                     android:layout_height="match_parent" />
 
             </LinearLayout>
-
+            <!--            내 배달 내역 페이지 끝-->
 
         </FrameLayout>
+        <!--        페이지 레이아웃 끝-->
     </LinearLayout>
 </LinearLayout>

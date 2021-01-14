@@ -29,7 +29,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="94dp"
             android:layout_marginTop="50dp"
-            android:text="이아람 님"
+            android:text="배달원 님"
             android:textColor="#ffffff"
             android:textSize="26dp"/>
 

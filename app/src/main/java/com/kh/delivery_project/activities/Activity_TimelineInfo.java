@@ -1,13 +1,17 @@
 package com.kh.delivery_project.activities;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Activity_TimelineInfo extends AppCompatActivity implements Codes, View.OnClickListener, AdapterView.OnItemClickListener {
+public class Activity_TimelineInfo extends AppCompatActivity implements Codes, View.OnClickListener, AdapterView.OnItemClickListener, View.OnKeyListener {
 
     Gson gson = new Gson();
 
@@ -72,6 +76,7 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         setViews();
         setListeners();
         setListView();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     private void setTimelineVo() {
@@ -150,6 +155,7 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         ivTimeLike.setOnClickListener(this);
         btnInsertComment.setOnClickListener(this);
         lvCommentList.setOnItemClickListener(this);
+        edtComment.setOnKeyListener(this);
     }
 
     private void setListView() {
@@ -274,5 +280,22 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(this, "아이템클릭", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if (v == edtComment) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                String result = insertComment();
+                if(result.equals("insertComment_success")) {
+                    edtComment.setText("");
+                    getCurrentComment();
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

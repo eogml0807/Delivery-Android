@@ -48,7 +48,7 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
 
     boolean autoLogin = false;
     String[] REQUIRED_PERMISSION = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,21 +86,23 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
         chkLoginAuto.setOnCheckedChangeListener(this);
     }
 
+    // 처음 설치 하면 위치 권한, 파일 읽기, 쓰기 권한 부여
     private void setPermission() {
         String temp = "";
 
-        for(int i = 0; i < REQUIRED_PERMISSION.length; i++) {
+        for (int i = 0; i < REQUIRED_PERMISSION.length; i++) {
             int permissionCheck = ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSION[i]);
-            if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                 temp += REQUIRED_PERMISSION[i] + " ";
             }
         }
 
-        if(TextUtils.isEmpty(temp) == false) {
+        if (TextUtils.isEmpty(temp) == false) {
             ActivityCompat.requestPermissions(this, temp.split(" "), PREMISSIONS);
         }
     }
 
+    // 자동 로그인 체크를 했었다면 바로 로그인, 계정을 찾을 수 없으면 자동 로그인 해제
     private void isAutoLogin() {
         boolean auto_login = PreferenceManager.getBoolean(this, "auto_login");
         if (auto_login) {
@@ -122,6 +124,7 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
         }
     }
 
+    // 아이디와 비밀번호로 DB에서 검색해 가져옴
     private DeliverVo login(String dlvr_id, String dlvr_pw) {
         if ((dlvr_id.equals("") || dlvr_id == null) || (dlvr_pw.equals("") || dlvr_pw == null)) {
             Toast.makeText(this, "아이디나 비밀번호를 입력하세요", Toast.LENGTH_SHORT).show();
@@ -141,8 +144,6 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d("grantResults", Arrays.toString(grantResults));
-        Log.d("permissions", Arrays.toString(permissions));
     }
 
     @Override
@@ -154,7 +155,9 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
                 String dlvr_id = edtLoginDlvrId.getText().toString();
                 String dlvr_pw = edtLoginDlvrPw.getText().toString();
                 DeliverVo deliverVo = login(dlvr_id, dlvr_pw);
+                // 로그인 성공
                 if (deliverVo != null) {
+                    // 자동 로그인 체크여부 확인
                     if (autoLogin) {
                         PreferenceManager.setString(this, "auto_dlvr_id", deliverVo.getDlvr_id());
                         PreferenceManager.setString(this, "auto_dlvr_pw", deliverVo.getDlvr_pw());
@@ -180,7 +183,7 @@ public class Activity_Home extends AppCompatActivity implements Codes, View.OnCl
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        this.autoLogin = true;
+        this.autoLogin = isChecked;
     }
 
     @Override
