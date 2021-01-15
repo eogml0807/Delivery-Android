@@ -133,7 +133,7 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
     }
 
     private void setTimelineList(int searchType) {
-        String url = "/timeline/android/getTimelineList";
+        String url = "/timeline/getTimelineList";
         ContentValues params = new ContentValues();
         switch (searchType) {
             case NOTICE_TIMELINE:
