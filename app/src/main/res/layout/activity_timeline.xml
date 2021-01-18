@@ -4,14 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp">
+    <!--    타임라인 페이지-->
 
-    <!--    타임라인 작성-->
     <Button
         android:id="@+id/btnToggleWriteForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="글 작성" />
 
+    <!--    글 종류 별 검색-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +25,8 @@
 
     </LinearLayout>
 
+
+    <!--    타임라인 작성-->
     <LinearLayout
         android:id="@+id/boardWriteForm"
         android:layout_width="match_parent"

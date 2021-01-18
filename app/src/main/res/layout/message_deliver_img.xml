@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
+<!--    배달원 메시지 이미지폼-->
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civSenderImg"

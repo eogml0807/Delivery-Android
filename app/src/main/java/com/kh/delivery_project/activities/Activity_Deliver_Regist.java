@@ -47,15 +47,15 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
 
     ImageView ivRegDlvrImg, ivRegDlvrIdCard;
     Button btnRegPrev, btnRegNext, btnCheckIdDupl, btnSelectBirth, btnSeacrhAddr, btnRegDlvrImg, btnRegDlvrIdCard;
+    TextView txtChkDlvrIdForm, txtChkDlvrPwForm, txtChkDlvrPwDupl, txtChkDlvrNameForm, txtChkDlvrPhoneForm, txtChkEmailForm;
+    EditText edtRegDlvrId, edtRegDlvrPw, edtRegDlvrPwDupl, edtRegDlvrName, edtRegDlvrPhone, edtRegDlvrEmail, edtRegDlvrAddr, edtRegDlvrDetailAddr, edtRegDlvrBirth;
     LinearLayout[] linRegs = new LinearLayout[5];
-    TextView txtChkDlvrIdForm, txtChkDlvrPwForm, txtChkDlvrPwDupl, txtChkDlvrNameForm, txtRegDlvrBirth, txtChkDlvrPhoneForm, txtChkEmailForm;
-    EditText edtRegDlvrId, edtRegDlvrPw, edtRegDlvrPwDupl, edtRegDlvrName, edtRegDlvrPhone, edtRegDlvrEmail, edtRegDlvrAddr, edtRegDlvrDetailAddr;
+    int[] lin_ids = {R.id.linReg1, R.id.linReg2, R.id.linReg3, R.id.linReg4, R.id.linReg5};
 
-    int focusedId;
-    int index = 0;
     File idCard;
     File img;
-    int[] lin_ids = {R.id.linReg1, R.id.linReg2, R.id.linReg3, R.id.linReg4, R.id.linReg5};
+    int focusedId;
+    int index = 0;
     boolean[] checkValues = new boolean[11];
     int[][] checkIndexs = {{0, 3},{4, 6},{7, 8},{9},{10}};
 
@@ -81,7 +81,7 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
         txtChkDlvrPwDupl = findViewById(R.id.txtChkDlvrPwDupl);
         txtChkDlvrNameForm = findViewById(R.id.txtChkDlvrNameForm);
         txtChkEmailForm = findViewById(R.id.txtChkEmailForm);
-        txtRegDlvrBirth = findViewById(R.id.txtRegDlvrBirth);
+        edtRegDlvrBirth = findViewById(R.id.edtRegDlvrBirth);
         txtChkDlvrPhoneForm = findViewById(R.id.txtChkDlvrPhoneForm);
         edtRegDlvrId = findViewById(R.id.edtRegDlvrId);
         edtRegDlvrPw = findViewById(R.id.edtRegDlvrPw);
@@ -96,6 +96,9 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
         for(int i = 0; i < linRegs.length; i++) {
             linRegs[i] = findViewById(lin_ids[i]);
         }
+
+        edtRegDlvrBirth.setEnabled(false);
+        edtRegDlvrAddr.setEnabled(false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -121,6 +124,7 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
         edtRegDlvrPhone.setOnFocusChangeListener(this);
     }
 
+    // 회원가입 폼 페이지 변경
     private void setRegistForm() {
         if(index >= 4) {
             index = 4;
@@ -140,8 +144,8 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
         linRegs[index].setVisibility(View.VISIBLE);
     }
 
-    private boolean registDeliver() {
-        boolean b = false;
+    // 회원 가입
+    private String registDeliver() {
         String dlvr_id = edtRegDlvrId.getText().toString();
         String dlvr_img = DLVR_IMG + dlvr_id + "_" + img.getName();
         String dlvr_idcard = DLVR_IDCARD + dlvr_id + "_" + idCard.getName();
@@ -154,37 +158,34 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
         params.put("dlvr_phone", edtRegDlvrPhone.getText().toString());
         params.put("dlvr_email", edtRegDlvrEmail.getText().toString());
         params.put("dlvr_addr", edtRegDlvrAddr.getText().toString() + " " + edtRegDlvrDetailAddr.getText().toString());
-        params.put("str_dlvr_birth", txtRegDlvrBirth.getText().toString());
+        params.put("str_dlvr_birth", edtRegDlvrBirth.getText().toString());
         params.put("dlvr_img", dlvr_img);
         params.put("dlvr_idcard", dlvr_idcard);
         
         String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        
         if(result.equals("registSuccess")) {
-            b = true;
             FileUploadUtil.upload(this, img, dlvr_img);
             FileUploadUtil.upload(this, idCard, dlvr_idcard);
-        } else {
-            Log.d("result is ", result);
         }
-        
-        return b;
+        return result;
     }
 
+    // 아이디 중복 검사
     private void checkIdDupl() {
         String url = "/account/checkIdDupl";
         ContentValues params = new ContentValues();
-        params.put("dlvr_id", edtRegDlvrId.getText().toString());
+        params.put("acc_id", edtRegDlvrId.getText().toString());
         Boolean result = gson.fromJson(ConnectServer.getData(url, params), Boolean.class);
         if(result) {
-            Toast.makeText(this, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "사용 가능한 아이디", Toast.LENGTH_SHORT).show();
             checkValues[1] = true;
         } else {
-            Toast.makeText(this, "사용 불가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "사용 불가능한 아이디", Toast.LENGTH_SHORT).show();
             checkValues[1] = false;
         }
     }
 
+    // 프로필, 신분증 이미지 출력
     private boolean showImage(Uri uri, File file, ImageView iv) {
         if(FileUploadUtil.isImage(file)) {
             try {
@@ -197,11 +198,12 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(this, "이미지 파일만", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "이미지 파일만 올려주세요", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
 
+    // 페이지 별 값 유효성 확인
     private boolean checkValuesOk() {
         boolean b = true;
         Log.d("checkValues", checkValues.toString());
@@ -223,6 +225,7 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
         return b;
     }
 
+    // 달력 다이얼로그
     private void showDatePickerDialog() {
         DateFormat str_year = new SimpleDateFormat("yyyy");
         DateFormat str_month = new SimpleDateFormat("MM");
@@ -244,7 +247,7 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
                 } else {
                     dlvr_birth += "0" + dayOfMonth;
                 }
-                txtRegDlvrBirth.setText(dlvr_birth);
+                edtRegDlvrBirth.setText(dlvr_birth);
                 checkValues[7] = true;
             }
         }, y, m, d);
@@ -264,21 +267,21 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
             case R.id.btnRegNext:
                 if(btnRegNext.getText().toString().equals("작성 완료")) {
                     if(checkValuesOk()) {
-                        if(registDeliver()) {
+                        if(registDeliver().equals("regist_success")) {
                             Toast.makeText(this, "배달원 가입 성공", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(this, "배달원 가입 실패", Toast.LENGTH_SHORT).show();
                         }
                         finish();
                     } else {
-                        Toast.makeText(this, "누락 부분 있음", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "누락된 부분이 있습니다", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if(checkValuesOk()) {
                         index++;
                         setRegistForm();
                     } else {
-                        Toast.makeText(this, "입력목록 누락 있음", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "누락된 부분이 있습니다", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -316,7 +319,7 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
             switch (requestCode) {
                 case REGIST_DLVR_BIRTH:
                     String str_dlvr_birth = data.getStringExtra("str_dlvr_birth");
-                    txtRegDlvrBirth.setText(str_dlvr_birth);
+                    edtRegDlvrBirth.setText(str_dlvr_birth);
                     checkValues[7] = true;
                     break;
                 case REGIST_DLVR_ADDR:
@@ -349,13 +352,14 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
     public void onTextChanged(CharSequence s, int start, int before, int count) {
     }
 
+    // 값 유효성 검사
     @Override
     public void afterTextChanged(Editable s) {
         String string = s.toString();
         switch (focusedId) {
             case R.id.edtRegDlvrId:
                 if(string.length() < 6) {
-                    txtChkDlvrIdForm.setText("아이디는 6글자 이상");
+                    txtChkDlvrIdForm.setText("아이디는 6글자 이상, 영어 소문자, 숫자만 가능합니다");
                     txtChkDlvrIdForm.setTextColor(Color.RED);
                     checkValues[0] = false;
                 } else {
@@ -376,7 +380,7 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
                 break;
             case R.id.edtRegDlvrPw:
                 if(string.length() < 8) {
-                    txtChkDlvrPwForm.setText("비밀번호는 8자리 이상");
+                    txtChkDlvrPwForm.setText("비밀번호는 8자리 이상, 영어 소문자, 숫자만 가능합니다");
                     txtChkDlvrPwForm.setTextColor(Color.RED);
                     checkValues[2] = false;
                 } else {
@@ -408,25 +412,25 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
                         checkValues[3] = false;
                     }
                 } else {
-                    txtChkDlvrPwDupl.setText("비밀번호부터 맞게 입력해라");
+                    txtChkDlvrPwDupl.setText("비밀번호를 맞게 입력해주세요");
                     txtChkDlvrPwDupl.setTextColor(Color.RED);
                     checkValues[3] = false;
                 }
                 break;
             case R.id.edtRegDlvrName:
                 if(string.length() < 2) {
-                    txtChkDlvrNameForm.setText("똑바로 입력해라");
+                    txtChkDlvrNameForm.setText("제대로 입력해주세요");
                     txtChkDlvrNameForm.setTextColor(Color.RED);
                     checkValues[4] = false;
                 } else {
                     for(int i = 0; i < string.length(); i++) {
                         char code = string.charAt(i);
                         if(code >= 44032 && code <= 55203) {
-                            txtChkDlvrNameForm.setText("제대로된 이름");
+                            txtChkDlvrNameForm.setText("");
                             txtChkDlvrNameForm.setTextColor(Color.BLUE);
                             checkValues[4] = true;
                         } else {
-                            txtChkDlvrNameForm.setText("한글만 입력");
+                            txtChkDlvrNameForm.setText("한글만 입력가능합니다");
                             txtChkDlvrNameForm.setTextColor(Color.RED);
                             checkValues[4] = false;
                         }
@@ -438,22 +442,22 @@ public class Activity_Deliver_Regist extends AppCompatActivity implements Codes,
                         (string.indexOf("@") != 0) &&
                         (string.indexOf("@")+1 < string.indexOf(".")) &&
                         (string.indexOf(".")+1 < string.length())) {
-                    txtChkEmailForm.setText("옳은 이메일");
+                    txtChkEmailForm.setText("");
                     txtChkEmailForm.setTextColor(Color.BLUE);
                     checkValues[5] = true;
                 } else {
-                    txtChkEmailForm.setText("옳지 않은 이메일");
+                    txtChkEmailForm.setText("옳지 않은 이메일 형식입니다");
                     txtChkEmailForm.setTextColor(Color.RED);
                     checkValues[5] = false;
                 }
                 break;
             case R.id.edtRegDlvrPhone:
                 if(string.length() >= 9) {
-                    txtChkDlvrPhoneForm.setText("올바른 전화번호 형식");
+                    txtChkDlvrPhoneForm.setText("");
                     txtChkDlvrPhoneForm.setTextColor(Color.BLUE);
                     checkValues[6] = true;
                 } else {
-                    txtChkDlvrPhoneForm.setText("올바르지 않은 전화번호 형식");
+                    txtChkDlvrPhoneForm.setText("전화번호 형식에 맞지 않습니다");
                     txtChkDlvrPhoneForm.setTextColor(Color.RED);
                     checkValues[6] = false;
                 }

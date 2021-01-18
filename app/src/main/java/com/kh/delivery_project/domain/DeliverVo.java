@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class DeliverVo implements Parcelable {
+    // 테이블 컬럼
     private int dlvr_no;
     private String dlvr_id;
     private String dlvr_pw;
@@ -20,8 +21,11 @@ public class DeliverVo implements Parcelable {
     private Timestamp dlvr_date;
     private String dlvr_state;
     private int dlvr_point;
-    private String dlvr_rank;
     private String account_state;
+
+    // 조인 컬럼
+    private int order_count;
+    private int dlvr_rank;
 
     public DeliverVo() {
     }
@@ -38,8 +42,32 @@ public class DeliverVo implements Parcelable {
         dlvr_idcard = in.readString();
         dlvr_state = in.readString();
         dlvr_point = in.readInt();
-        dlvr_rank = in.readString();
         account_state = in.readString();
+        order_count = in.readInt();
+        dlvr_rank = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(dlvr_no);
+        dest.writeString(dlvr_id);
+        dest.writeString(dlvr_pw);
+        dest.writeString(dlvr_name);
+        dest.writeString(dlvr_phone);
+        dest.writeString(dlvr_email);
+        dest.writeString(dlvr_addr);
+        dest.writeString(dlvr_img);
+        dest.writeString(dlvr_idcard);
+        dest.writeString(dlvr_state);
+        dest.writeInt(dlvr_point);
+        dest.writeString(account_state);
+        dest.writeInt(order_count);
+        dest.writeInt(dlvr_rank);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<DeliverVo> CREATOR = new Creator<DeliverVo>() {
@@ -158,20 +186,28 @@ public class DeliverVo implements Parcelable {
         this.dlvr_point = dlvr_point;
     }
 
-    public String getDlvr_rank() {
-        return dlvr_rank;
-    }
-
-    public void setDlvr_rank(String dlvr_rank) {
-        this.dlvr_rank = dlvr_rank;
-    }
-
     public String getAccount_state() {
         return account_state;
     }
 
     public void setAccount_state(String account_state) {
         this.account_state = account_state;
+    }
+
+    public int getOrder_count() {
+        return order_count;
+    }
+
+    public void setOrder_count(int order_count) {
+        this.order_count = order_count;
+    }
+
+    public int getDlvr_rank() {
+        return dlvr_rank;
+    }
+
+    public void setDlvr_rank(int dlvr_rank) {
+        this.dlvr_rank = dlvr_rank;
     }
 
     @Override
@@ -190,30 +226,9 @@ public class DeliverVo implements Parcelable {
                 ", dlvr_date=" + dlvr_date +
                 ", dlvr_state='" + dlvr_state + '\'' +
                 ", dlvr_point=" + dlvr_point +
-                ", dlvr_rank='" + dlvr_rank + '\'' +
                 ", account_state='" + account_state + '\'' +
+                ", order_count=" + order_count +
+                ", dlvr_rank=" + dlvr_rank +
                 '}';
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(dlvr_no);
-        dest.writeString(dlvr_id);
-        dest.writeString(dlvr_pw);
-        dest.writeString(dlvr_name);
-        dest.writeString(dlvr_phone);
-        dest.writeString(dlvr_email);
-        dest.writeString(dlvr_addr);
-        dest.writeString(dlvr_img);
-        dest.writeString(dlvr_idcard);
-        dest.writeString(dlvr_state);
-        dest.writeInt(dlvr_point);
-        dest.writeString(dlvr_rank);
-        dest.writeString(account_state);
     }
 }

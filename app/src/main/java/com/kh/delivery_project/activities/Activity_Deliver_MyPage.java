@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.kh.delivery_project.R;
 import com.kh.delivery_project.adapters.Adapter_MyOrderedList;
 import com.kh.delivery_project.connection.ConnectServer;
+import com.kh.delivery_project.domain.AccountDto;
 import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.util.Codes;
@@ -56,7 +57,7 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
     LinearLayout linMyInfo, linModifyInfo, linMyDelivery, MyLinMod01, MyLinMod02;
     Button btnMyInfo, btnModMyInfo, btnModDlvrImg, btnModOk, btnDeleteAccount, btnMyOrderedList, btnModPrev, btnModNext, btnSeacrhModAddr, btnClearAddr, btnClearImg;
     EditText edtModDlvrPw, edtModDlvrPwDupl, edtModDlvrPhone, edtModDlvrEmail, edtModDlvrAddr, edtModDlvrDetailAddr;
-    TextView txtMyDlvrId, txtMyDlvrName, txtMyDlvrPhone, txtMyDlvrEmail, txtMyDlvrAddr, txtMyDlvrPoint, txtMyDlvrRank, txtChkModDlvrPwForm, txtChkModDlvrPwDupl, txtChkModDlvrEmailForm, txtChkModDlvrPhoneForm;
+    TextView txtMyDlvrId, txtMyDlvrName, txtMyDlvrPhone, txtMyDlvrEmail, txtMyDlvrAddr, txtMyDlvrPoint, txtChkModDlvrPwForm, txtChkModDlvrPwDupl, txtChkModDlvrEmailForm, txtChkModDlvrPhoneForm;
     ImageView ivMyDlvrImg, ivModDlvrImg;
     ListView lvMyOrderedList;
 
@@ -110,7 +111,6 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         txtMyDlvrEmail = findViewById(R.id.txtMyDlvrEmail);
         txtMyDlvrAddr = findViewById(R.id.txtMyDlvrAddr);
         txtMyDlvrPoint = findViewById(R.id.txtMyDlvrPoint);
-        txtMyDlvrRank = findViewById(R.id.txtMyDlvrRank);
         txtChkModDlvrPwForm = findViewById(R.id.txtChkModDlvrPwForm);
         txtChkModDlvrPwDupl = findViewById(R.id.txtChkModDlvrPwDupl);
         txtChkModDlvrEmailForm = findViewById(R.id.txtChkModDlvrEmailForm);
@@ -188,7 +188,6 @@ public class Activity_Deliver_MyPage extends AppCompatActivity implements View.O
         txtMyDlvrEmail.setText(deliverVo.getDlvr_email());
         txtMyDlvrAddr.setText(deliverVo.getDlvr_addr());
         txtMyDlvrPoint.setText(String.valueOf(deliverVo.getDlvr_point()));
-        txtMyDlvrRank.setText(deliverVo.getDlvr_rank());
     }
 
     private void setListView() {

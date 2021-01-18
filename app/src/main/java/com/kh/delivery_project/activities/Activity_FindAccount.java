@@ -52,6 +52,8 @@ public class Activity_FindAccount extends AppCompatActivity implements View.OnCl
         btnFindPw.setOnClickListener(this);
     }
 
+    // 이름, 이메일, 전화번호로 아이디 조회
+    // 조회 성공 시 비밀번호 찾기로 변경
     private void findAccountId() {
         String dlvr_name = edtFindAccName.getText().toString();
         String dlvr_email = edtFindAccEmail.getText().toString();
@@ -85,6 +87,8 @@ public class Activity_FindAccount extends AppCompatActivity implements View.OnCl
         }
     }
 
+    // 아이디, 이름, 이메일, 전화번호로 비밀번호 조회
+    // 조회 성공 시 이메일로 비밀번호 전송
     private void findAccountPw() {
         String dlvr_id = edtFindAccId.getText().toString();
         String dlvr_name = edtFindAccName.getText().toString();

@@ -256,7 +256,6 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
 
     private void refresh() {
         Intent intent = new Intent(getApplicationContext(), Activity_Timeline.class);
-        intent.putExtra("deliverVo", deliverVo);
         finish();
         startActivity(intent);
     }
@@ -268,79 +267,6 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
         showEnd = false;
         islastItem = false;
         lockListView = false;
-    }
-
-    private void openDialog(final TimelineVo timelineVo) {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_timeline, null, false);
-        txtWriterName = dialogView.findViewById(R.id.txtWriterName);
-        txtTimeContent = dialogView.findViewById(R.id.txtTimeContent);
-        edtTimeContent = dialogView.findViewById(R.id.edtTimeContent);
-        btnModTimeImg = dialogView.findViewById(R.id.btnModTimeImg);
-        ivDialogTimeImg = dialogView.findViewById(R.id.ivDialogTimeImg);
-        rbTimeStar = dialogView.findViewById(R.id.rbTimeStar);
-
-        txtWriterName.setText(timelineVo.getWriter_name());
-        txtTimeContent.setText(timelineVo.getTime_content());
-        edtTimeContent.setText(timelineVo.getTime_content());
-        if(timelineVo.getTime_state().equals("2-002")) {
-            rbTimeStar.setVisibility(View.VISIBLE);
-            rbTimeStar.setRating((int) timelineVo.getTime_star());
-        }
-        if(timelineVo.getTime_img() != null) {
-            String url = IMAGE_ADDRESS + timelineVo.getTime_img();
-            UrlImageUtil imgUtil = new UrlImageUtil(url, ivDialogTimeImg);
-            imgUtil.execute();
-        }
-
-        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(Activity_Timeline.this);
-        materialAlertDialogBuilder.setView(dialogView)
-                .setTitle("게시물 정보")
-                .setNeutralButton("닫기", null);
-        if(deliverVo.getDlvr_no() == timelineVo.getWriter_no()) {
-            txtTimeContent.setVisibility(View.INVISIBLE);
-            edtTimeContent.setVisibility(View.VISIBLE);
-            btnModTimeImg.setVisibility(View.VISIBLE);
-            materialAlertDialogBuilder.setNegativeButton("삭제", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    int time_no = timelineVo.getTime_no();
-                    String time_content = edtTimeContent.getText().toString();
-                    modifyTimeline(time_no, time_content);
-                }
-            })
-                    .setPositiveButton("수정", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            int time_no = timelineVo.getTime_no();
-                            deleteTimeline(time_no);
-                        }
-                    }).show();
-        } else {
-            materialAlertDialogBuilder.show();
-        }
-    }
-
-    private void modifyTimeline(int time_no, String time_content) {
-        String url = "/timeline/android/updateTimeline";
-        ContentValues params = new ContentValues();
-        params.put("time_no", time_no);
-        params.put("time_content", time_content);
-        if(modTimeImg != null) {
-            String time_img = TIMELINE_IMG + deliverVo.getDlvr_id() + "_" + modTimeImg.getName();
-            params.put("time_img", time_img);
-        }
-        Log.d("params is ", params.toString());
-//        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-//        Log.d("result is ", result);
-    }
-
-    private void deleteTimeline(int time_no) {
-        String url = "/timeline/android/deleteTimeline";
-        ContentValues params = new ContentValues();
-        params.put("time_no", time_no);
-        Log.d("params", params.toString());
-//        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-//        Log.d("result is ", result);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -402,12 +328,6 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent, WRITE_TIME_IMG);
                 break;
-            case R.id.btnModTimeImg:
-                intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, MOD_TIME_IMG);
-                break;
         }
     }
 
@@ -433,7 +353,6 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
         Intent intent = new Intent(getApplicationContext(), Activity_TimelineInfo.class);
         intent.putExtra("time_no", timelineVo.getTime_no());
         startActivity(intent);
-//        openDialog(timelineVo);
     }
 
     @Override

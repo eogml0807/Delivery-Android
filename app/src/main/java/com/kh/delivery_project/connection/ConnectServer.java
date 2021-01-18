@@ -11,6 +11,7 @@ public class ConnectServer {
             Task task = new Task();
             task.setUrl(url);
             String result = task.execute(params).get();
+            Log.d("ConnectServer.params", result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -23,6 +24,7 @@ public class ConnectServer {
             Task task = new Task();
             task.setUrl(url);
             String result = task.execute().get();
+            Log.d("ConnectServer.noparams", result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

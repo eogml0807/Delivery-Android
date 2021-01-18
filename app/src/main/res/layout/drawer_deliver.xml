@@ -6,6 +6,7 @@
     android:layout_gravity="start"
     android:background="#5559b4"
     android:orientation="vertical">
+<!--    메인 페이지 사이드바-->
 
     <RelativeLayout
         android:layout_width="match_parent"

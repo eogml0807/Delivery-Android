@@ -45,7 +45,9 @@ public class Adapter_OrderList extends BaseAdapter {
             convertView = View.inflate(context, layout, null);
         }
 
-        TextView txtOrderInfo = convertView.findViewById(R.id.txtOrderInfo);
+        TextView txtOrderNo = convertView.findViewById(R.id.txtOrderNo);
+        TextView txtOrderLoc = convertView.findViewById(R.id.txtOrderLoc);
+        TextView txtOrderDistance = convertView.findViewById(R.id.txtOrderDistance);
 
         OrderVo orderVo = orderList.get(position);
 
@@ -53,8 +55,9 @@ public class Adapter_OrderList extends BaseAdapter {
         String order_addr = orderVo.getOrder_addr();
         int distance = orderVo.getDistance();
 
-        String text = "주문번호 : " + order_no + " | 주소 : " + order_addr + " | 거리 : " + distance + "m";
-        txtOrderInfo.setText(text);
+        txtOrderNo.setText(String.valueOf(order_no));
+        txtOrderLoc.setText(order_addr);
+        txtOrderDistance.setText(distance + "m");
 
         return convertView;
     }

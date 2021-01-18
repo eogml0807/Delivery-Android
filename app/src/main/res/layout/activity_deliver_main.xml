@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--사이드 바-->
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout"
@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     android:background="#f4f4f4"
     android:orientation="vertical">
+    <!--    배달원 메인 페이지-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!--        툴바-->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -20,16 +22,17 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-
+        <!--        타임라인 레이아웃-->
         <LinearLayout
-            android:background="#FFF4AE"
             android:id="@+id/linTimeline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="#FFF4AE"
             android:orientation="vertical"
             android:paddingTop="10dp">
 
+            <!--            최근 글 출력-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
@@ -104,7 +107,9 @@
                         android:rating="2" />
                 </LinearLayout>
             </LinearLayout>
+            <!--            최근 글 출력 끝-->
 
+            <!--            타임라인 페이지 이동 버튼-->
             <Button
                 android:id="@+id/btnMainToTimeline"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -116,35 +121,105 @@
                 android:textSize="30dp" />
 
         </LinearLayout>
+        <!--        타임라인 레이아웃 끝-->
 
+        <!--        배달 랭킹, 포인트 랭킹 레이아웃-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="배달횟수 랭킹 표시, 링크" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="1월의 배달 랭킹" />
+
+                <TextView
+                    android:id="@+id/txtDlvr1st"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="1등"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/txtDlvr2nd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="2등"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/txtDlvr3rd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="3등"
+                    android:textSize="22dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="내 배달 횟수 등등 표시" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="포인트 랭킹" />
+
+                <TextView
+                    android:id="@+id/txtPoint1st"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="1등"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/txtPoint2nd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="2등"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/txtPoint3rd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="3등"
+                    android:textSize="22dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
+        <!--        배달 랭킹, 포인트 랭킹 레이아웃 끝-->
 
-
+        <!--        현재 배달 정보, 배달 시작 버튼 레이아웃-->
         <LinearLayout
-            android:background="#AEFFF4"
             android:id="@+id/linDelivery"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="#AEFFF4"
             android:orientation="vertical"
             android:padding="10dp">
 
+            <!--            현재 접수한 배달 정보-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -232,7 +307,9 @@
                 </LinearLayout>
 
             </FrameLayout>
+            <!--            현재 접수된 배달 정보 끝-->
 
+            <!--            배달 페이지 이동 버튼-->
             <Button
                 android:id="@+id/btnMainToDelivery"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -244,7 +321,9 @@
                 android:textSize="30dp" />
 
         </LinearLayout>
+        <!--        현재 배달 정보, 배달 시작 버튼 레이아웃 끝-->
     </LinearLayout>
 
+    <!--    사이드 바-->
     <include layout="@layout/drawer_deliver" />
 </androidx.drawerlayout.widget.DrawerLayout>

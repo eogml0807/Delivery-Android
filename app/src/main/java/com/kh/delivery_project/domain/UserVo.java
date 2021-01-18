@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class UserVo implements Parcelable {
+    // 테이블 컬럼
     private int user_no;
     private String user_id;
     private String user_pw;
@@ -18,8 +19,11 @@ public class UserVo implements Parcelable {
     private Timestamp user_date;
     private String user_state;
     private int user_point;
-    private String user_rank;
     private String account_state;
+
+    // 조인 컬럼
+    private int order_count;
+    private int user_rank;
 
     public UserVo() {
     }
@@ -34,8 +38,9 @@ public class UserVo implements Parcelable {
         user_addr = in.readString();
         user_state = in.readString();
         user_point = in.readInt();
-        user_rank = in.readString();
         account_state = in.readString();
+        order_count = in.readInt();
+        user_rank = in.readInt();
     }
 
     @Override
@@ -49,8 +54,9 @@ public class UserVo implements Parcelable {
         dest.writeString(user_addr);
         dest.writeString(user_state);
         dest.writeInt(user_point);
-        dest.writeString(user_rank);
         dest.writeString(account_state);
+        dest.writeInt(order_count);
+        dest.writeInt(user_rank);
     }
 
     @Override
@@ -158,20 +164,28 @@ public class UserVo implements Parcelable {
         this.user_point = user_point;
     }
 
-    public String getUser_rank() {
-        return user_rank;
-    }
-
-    public void setUser_rank(String user_rank) {
-        this.user_rank = user_rank;
-    }
-
     public String getAccount_state() {
         return account_state;
     }
 
     public void setAccount_state(String account_state) {
         this.account_state = account_state;
+    }
+
+    public int getOrder_count() {
+        return order_count;
+    }
+
+    public void setOrder_count(int order_count) {
+        this.order_count = order_count;
+    }
+
+    public int getUser_rank() {
+        return user_rank;
+    }
+
+    public void setUser_rank(int user_rank) {
+        this.user_rank = user_rank;
     }
 
     @Override
@@ -188,8 +202,9 @@ public class UserVo implements Parcelable {
                 ", user_date=" + user_date +
                 ", user_state='" + user_state + '\'' +
                 ", user_point=" + user_point +
-                ", user_rank='" + user_rank + '\'' +
                 ", account_state='" + account_state + '\'' +
+                ", order_count=" + order_count +
+                ", user_rank=" + user_rank +
                 '}';
     }
 }

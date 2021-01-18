@@ -3,6 +3,7 @@ package com.kh.delivery_project.util;
 import android.location.Address;
 import android.util.Log;
 
+import com.kh.delivery_project.domain.AccountDto;
 import com.kh.delivery_project.domain.CommentVo;
 import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.MessageVo;
@@ -33,7 +34,7 @@ public class ConvertUtil {
     public static DeliverVo getDeliverVo(Map<String, Object> map) {
         try {
             DeliverVo deliverVo = new DeliverVo();
-            deliverVo.setDlvr_no((int)(double) map.get("dlvr_no"));
+            deliverVo.setDlvr_no((int) (double) map.get("dlvr_no"));
             deliverVo.setDlvr_id((String) map.get("dlvr_id"));
             deliverVo.setDlvr_pw((String) map.get("dlvr_pw"));
             deliverVo.setDlvr_name((String) map.get("dlvr_name"));
@@ -44,8 +45,10 @@ public class ConvertUtil {
             deliverVo.setDlvr_idcard((String) map.get("dlvr_idcard"));
             deliverVo.setDlvr_birth(getBirth((String) map.get("dlvr_birth")));
             deliverVo.setDlvr_date(getDate((String) map.get("dlvr_date")));
-            deliverVo.setDlvr_point((int)(double) map.get("dlvr_point"));
-            deliverVo.setDlvr_rank((String) map.get("dlvr_rank"));
+            deliverVo.setDlvr_point((int) (double) map.get("dlvr_point"));
+            deliverVo.setAccount_state((String) map.get("account_state"));
+            deliverVo.setDlvr_rank((int) (double) map.get("dlvr_rank"));
+            deliverVo.setOrder_count((int) (double) map.get("order_count"));
             return deliverVo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,7 +68,7 @@ public class ConvertUtil {
             orderVo.setDlvr_no((int) (double) map.get("dlvr_no"));
             orderVo.setOrder_state((String) map.get("order_state"));
             orderVo.setOrder_date(getDate((String) map.get("order_date")));
-            if(map.get("user_name") != null) {
+            if (map.get("user_name") != null) {
                 orderVo.setUser_name((String) map.get("user_name"));
             }
             orderVo.setUser_name((String) map.get("user_name"));
@@ -90,9 +93,10 @@ public class ConvertUtil {
             userVo.setUser_email((String) map.get("user_email"));
             userVo.setUser_addr((String) map.get("user_addr"));
             userVo.setUser_point((int) (double) map.get("user_point"));
-            userVo.setUser_rank((String) map.get("user_rank"));
             userVo.setUser_birth(getBirth((String) map.get("user_birth")));
             userVo.setUser_date(getDate((String) map.get("user_date")));
+            userVo.setUser_rank((int) (double) map.get("user_rank"));
+            userVo.setOrder_count((int) (double) map.get("order_count"));
             return userVo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,5 +161,19 @@ public class ConvertUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static AccountDto getAccountDto(Map<String, Object> map) {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcc_no((int) (double) map.get("acc_no"));
+        accountDto.setAcc_id((String) map.get("acc_id"));
+        accountDto.setAcc_pw((String) map.get("acc_pw"));
+        accountDto.setAcc_name((String) map.get("acc_name"));
+        accountDto.setAcc_email((String) map.get("acc_email"));
+        accountDto.setAcc_phone((String) map.get("acc_phone"));
+        accountDto.setAcc_state((String) map.get("acc_state"));
+        accountDto.setAcc_point((int) (double) map.get("acc_point"));
+        accountDto.setPoint_rank((int) (double) map.get("point_rank"));
+        return accountDto;
     }
 }

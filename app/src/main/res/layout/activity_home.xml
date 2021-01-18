@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#f4f4f4"
     android:padding="15dp">
+    <!--    홈 페이지-->
 
     <!--    대표 이미지-->
     <ImageView

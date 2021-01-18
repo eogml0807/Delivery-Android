@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="5dp">
+<!--    내 배달 내역 리스트뷰 레이아웃-->
 
     <TextView
         android:id="@+id/txtMyOrderNo"

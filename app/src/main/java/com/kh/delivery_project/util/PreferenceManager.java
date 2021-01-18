@@ -33,8 +33,9 @@ public class PreferenceManager {
         editor.putString("dlvr_date", String.valueOf(deliverVo.getDlvr_date()));
         editor.putString("dlvr_state", deliverVo.getDlvr_state());
         editor.putInt("dlvr_point", deliverVo.getDlvr_point());
-        editor.putString("dlvr_rank", deliverVo.getDlvr_rank());
         editor.putString("account_state", deliverVo.getAccount_state());
+        editor.putInt("dlvr_rank", deliverVo.getDlvr_rank());
+        editor.putInt("order_count", deliverVo.getOrder_count());
         editor.commit();
     }
 
@@ -60,8 +61,9 @@ public class PreferenceManager {
         }
         deliverVo.setDlvr_state(pref.getString("dlvr_state", ""));
         deliverVo.setDlvr_point(pref.getInt("dlvr_point", 0));
-        deliverVo.setDlvr_rank(pref.getString("dlvr_rank", ""));
         deliverVo.setAccount_state(pref.getString("account_state", ""));
+        deliverVo.setDlvr_rank(pref.getInt("dlvr_rank", 0));
+        deliverVo.setOrder_count(pref.getInt("order_count", 0));
         return deliverVo;
     }
 

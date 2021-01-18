@@ -5,6 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical">
+<!--    배달 정보 조회 다이얼로그-->
 
     <TableLayout
         android:layout_width="250dp"

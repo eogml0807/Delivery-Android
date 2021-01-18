@@ -2,11 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="20dp">
+    <!--    내 주변 주문 목록 리스트뷰 레이아웃-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="주문 번호"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txtOrderNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="주문 번호"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="거리"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/txtOrderDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="거리"
+                android:textSize="20dp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtOrderInfo"/>
+        android:text="주문 위치"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:id="@+id/txtOrderLoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="주문 위치"
+        android:textSize="20dp" />
 
 </LinearLayout>

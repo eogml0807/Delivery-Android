@@ -25,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.gson.Gson;
 import com.kh.delivery_project.R;
 import com.kh.delivery_project.connection.ConnectServer;
+import com.kh.delivery_project.domain.AccountDto;
 import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.OrderVo;
 import com.kh.delivery_project.domain.TimelineVo;
@@ -35,6 +36,7 @@ import com.kh.delivery_project.util.Keys;
 import com.kh.delivery_project.util.PreferenceManager;
 import com.kh.delivery_project.util.UrlImageUtil;
 
+import java.util.List;
 import java.util.Map;
 
 public class Activity_Deliver_Main extends AppCompatActivity implements Codes, Keys, View.OnClickListener, DrawerLayout.DrawerListener {
@@ -50,6 +52,10 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
     TextView drawerDlvrName, txtLastWriterName, txtLastTimeContent, txtLastTimeStar, txtMainOrderCa, txtMainOrderReq, txtMainOrderLoc;
     ImageView drawerDlvrImg;
     RatingBar rbLastTimeStar;
+    TextView[] txtDlvrRank = new TextView[3];
+    int[] txtDlvrRankId = {R.id.txtDlvr1st, R.id.txtDlvr2nd, R.id.txtDlvr3rd};
+    TextView[] txtPointRank = new TextView[3];
+    int[] txtPointRankId = {R.id.txtPoint1st, R.id.txtPoint2nd, R.id.txtPoint3rd};
 
     TimelineVo timelineVo;
     DeliverVo deliverVo;
@@ -62,7 +68,37 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         setViews();
         setListeners();
         setLastTimeline();
+        getDlvrRank();
+        getPointRank();
         setMyOrder();
+    }
+
+    private void getPointRank() {
+        String url = "/account/getPointRank";
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url), List.class);
+        Log.d("pointRank", list.toString());
+        if(list.size() > 0) {
+            for(int i = 0; i < 3; i++) {
+                Map<String, Object> map = list.get(i);
+                AccountDto accountDto = ConvertUtil.getAccountDto(map);
+                String text = accountDto.getAcc_name() + " 님\n - " + accountDto.getAcc_point() + " 점";
+                txtPointRank[i].setText(text);
+            }
+        }
+    }
+
+    private void getDlvrRank() {
+        String url = "/deliver/getDlvrRank";
+        List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url), List.class);
+        Log.d("dlvrRank", list.toString());
+        if(list.size() > 0) {
+            for(int i = 0; i < 3; i++) {
+                Map<String, Object> map = list.get(i);
+                DeliverVo deliverVo = ConvertUtil.getDeliverVo(map);
+                String text = deliverVo.getDlvr_name() + " 님\n - " + deliverVo.getOrder_count() + " 회";
+                txtDlvrRank[i].setText(text);
+            }
+        }
     }
 
     private void setViews() {
@@ -89,6 +125,11 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         relMyDelivery = findViewById(R.id.relMyDelivery);
         relLogout = findViewById(R.id.relLogout);
         rbLastTimeStar = findViewById(R.id.rbLastTimeStar);
+
+        for(int i = 0; i < 3; i++) {
+            txtDlvrRank[i] = findViewById(txtDlvrRankId[i]);
+            txtPointRank[i] = findViewById(txtPointRankId[i]);
+        }
 
         toolbar.setTitle(R.string.deliver_main);
         setSupportActionBar(toolbar);

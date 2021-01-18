@@ -4,13 +4,16 @@
     android:layout_height="match_parent"
     android:background="#f4f4f4"
     android:orientation="vertical">
+    <!--    회원가입 페이지-->
 
+    <!--    회원가입 폼-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:padding="15dp">
 
+        <!--        아이디 / 아이디중복 / 비밀번호 / 비밀번호확인-->
         <LinearLayout
             android:id="@+id/linReg1"
             android:layout_width="match_parent"
@@ -85,7 +88,9 @@
                 android:textSize="20dp" />
 
         </LinearLayout>
+        <!--        아이디 / ... 끝-->
 
+        <!--        이름 / 이메일 / 전화번호-->
         <LinearLayout
             android:id="@+id/linReg2"
             android:layout_width="match_parent"
@@ -148,7 +153,9 @@
                 android:textSize="20dp" />
 
         </LinearLayout>
+        <!--        이름 / ... 끝-->
 
+        <!--        생년월일 / 주소-->
         <LinearLayout
             android:id="@+id/linReg3"
             android:layout_width="match_parent"
@@ -167,13 +174,13 @@
                 android:textSize="15dp" />
 
             <EditText
-                android:id="@+id/txtRegDlvrBirth"
+                android:id="@+id/edtRegDlvrBirth"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="#FFDED7"
-                android:editable="false"
                 android:hint="  생년월일"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#000000" />
 
             <Button
                 android:id="@+id/btnSeacrhAddr"
@@ -190,10 +197,10 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="5dp"
                 android:background="#FFDED7"
-                android:editable="false"
-                android:hint="주소"
+                android:hint="  주소 검색해주세요"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#000000" />
 
             <EditText
                 android:id="@+id/edtRegDlvrDetailAddr"
@@ -205,7 +212,9 @@
                 android:maxLines="1" />
 
         </LinearLayout>
+        <!--        생년월일 / ... 끝-->
 
+        <!--        프로필 이미지-->
         <LinearLayout
             android:id="@+id/linReg4"
             android:layout_width="match_parent"
@@ -229,7 +238,9 @@
                 android:textSize="15dp" />
 
         </LinearLayout>
+        <!--        프로필 이미지 끝-->
 
+        <!--        신분증 이미지-->
         <LinearLayout
             android:id="@+id/linReg5"
             android:layout_width="match_parent"
@@ -253,9 +264,11 @@
                 android:textSize="15dp" />
 
         </LinearLayout>
+        <!--        신분증 이미지 끝-->
 
     </FrameLayout>
 
+    <!--    버튼-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -286,5 +299,5 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
+    <!--    버튼 끝-->
 </LinearLayout>
