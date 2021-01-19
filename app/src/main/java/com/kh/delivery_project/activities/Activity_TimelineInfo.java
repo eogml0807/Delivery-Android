@@ -3,6 +3,10 @@ package com.kh.delivery_project.activities;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -23,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -34,9 +39,12 @@ import com.kh.delivery_project.domain.DeliverVo;
 import com.kh.delivery_project.domain.TimelineVo;
 import com.kh.delivery_project.util.Codes;
 import com.kh.delivery_project.util.ConvertUtil;
+import com.kh.delivery_project.util.FileUploadUtil;
 import com.kh.delivery_project.util.PreferenceManager;
 import com.kh.delivery_project.util.UrlImageUtil;
 
+import java.io.File;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,25 +52,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Activity_TimelineInfo extends AppCompatActivity implements Codes, View.OnClickListener, AdapterView.OnItemClickListener, View.OnKeyListener {
+public class Activity_TimelineInfo extends AppCompatActivity implements Codes, View.OnClickListener, AdapterView.OnItemClickListener, View.OnKeyListener, MenuItem.OnMenuItemClickListener {
 
     Gson gson = new Gson();
 
     ImageView civWriterImg, ivTimeLike, ivTimeImg;
     TextView txtLikeCount, txtWriterName, txtTimeDate, txtTimeContent;
-    EditText edtComment;
-    Button btnInsertComment;
+    EditText edtComment, edtTimeContent;
+    Button btnInsertComment, btnModTimeImg, btnModTimelineOk, btnCancelModTimeline;
     RatingBar rbTimeStar;
     ListView lvCommentList;
+
+    MenuItem menuModTimeline, menuDelTimeline;
+    Adapter_CommentList adapter;
 
     DeliverVo deliverVo;
     TimelineVo timelineVo;
     List<CommentVo> commentList = new ArrayList<>();
 
-    Adapter_CommentList adapter;
-
     boolean isLike = false;
     int lastCommentNo;
+    File modTimeImg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +87,21 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         setListeners();
         setListView();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timelineinfo, menu);
+        menuModTimeline = menu.findItem(R.id.menuModTimeline);
+        menuDelTimeline = menu.findItem(R.id.menuDelTimeline);
+        if(deliverVo.getDlvr_no() != timelineVo.getWriter_no()) {
+            menuModTimeline.setVisible(false);
+            menuDelTimeline.setVisible(false);
+        } else {
+            menuModTimeline.setOnMenuItemClickListener(this);
+            menuDelTimeline.setOnMenuItemClickListener(this);
+        }
+        return true;
     }
 
     private void setTimelineVo() {
@@ -121,7 +146,11 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         txtTimeDate = findViewById(R.id.txtTimeDate);
         txtTimeContent = findViewById(R.id.txtTimeContent);
         edtComment = findViewById(R.id.edtComment);
+        edtTimeContent = findViewById(R.id.edtTimeContent);
+        btnModTimeImg = findViewById(R.id.btnModTimeImg);
+        btnModTimelineOk = findViewById(R.id.btnModTimelineOk);
         btnInsertComment = findViewById(R.id.btnInsertComment);
+        btnCancelModTimeline = findViewById(R.id.btnCancelModTimeline);
         rbTimeStar = findViewById(R.id.rbTimeStar);
         lvCommentList = findViewById(R.id.lvCommentList);
 
@@ -154,6 +183,9 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
     private void setListeners() {
         ivTimeLike.setOnClickListener(this);
         btnInsertComment.setOnClickListener(this);
+        btnModTimeImg.setOnClickListener(this);
+        btnModTimelineOk.setOnClickListener(this);
+        btnCancelModTimeline.setOnClickListener(this);
         lvCommentList.setOnItemClickListener(this);
         edtComment.setOnKeyListener(this);
     }
@@ -242,6 +274,33 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
 //        return true;
 //    }
 
+    private void showImage(Uri uri, ImageView iv) {
+        try {
+            InputStream is = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            iv.setImageBitmap(bitmap);
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case MOD_TIME_IMG:
+                    modTimeImg = FileUploadUtil.getFile(this, data.getData());
+                    if (FileUploadUtil.isImage(modTimeImg)) {
+                        showImage(data.getData(), ivTimeImg);
+                    }
+                    break;
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -274,6 +333,18 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
                     getCurrentComment();
                 }
                 break;
+            case R.id.btnModTimeImg:
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, MOD_TIME_IMG);
+                break;
+            case R.id.btnModTimelineOk:
+//                updateTimeline();
+                break;
+            case R.id.btnCancelModTimeline:
+                toggleButtons(true);
+                break;
         }
     }
 
@@ -297,5 +368,51 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menuDelTimeline:
+//                if(deleteTimeline(timelineVo.getTime_no()).equals("deleteArticle_success")) {
+//
+//                } else {
+//                    Toast.makeText(this, "삭제 실패", Toast.LENGTH_SHORT).show();
+//                }
+                break;
+            case R.id.menuModTimeline:
+                toggleButtons(true);
+                break;
+        }
+        return false;
+    }
+
+    private void updateTimeline() {
+        String url = "/timeline/updateArticle";
+        ContentValues params = new ContentValues();
+    }
+
+    private void toggleButtons(boolean b) {
+        if(b) {
+            txtTimeContent.setVisibility(View.GONE);
+            edtTimeContent.setVisibility(View.VISIBLE);
+            btnModTimeImg.setVisibility(View.VISIBLE);
+            btnModTimelineOk.setVisibility(View.VISIBLE);
+        } else {
+            txtTimeContent.setVisibility(View.VISIBLE);
+            edtTimeContent.setVisibility(View.GONE);
+            btnModTimeImg.setVisibility(View.GONE);
+            btnModTimelineOk.setVisibility(View.GONE);
+            String imgUrl = IMAGE_ADDRESS + timelineVo.getWriter_img();
+            UrlImageUtil urlImageUtil = new UrlImageUtil(imgUrl, civWriterImg);
+            urlImageUtil.execute();
+        }
+    }
+
+    private String deleteTimeline(int time_no) {
+        String url = "/timeline/deleteArticle/" + time_no;
+        String result = gson.fromJson(ConnectServer.getData(url), String.class);
+        return result;
     }
 }

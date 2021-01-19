@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +61,7 @@ import java.util.Map;
 
 public class Activity_Delivery extends AppCompatActivity
         implements View.OnClickListener, MapView.POIItemEventListener, MapView.MapViewEventListener,
-        MapView.CurrentLocationEventListener, Codes {
+        MapView.CurrentLocationEventListener, Codes, View.OnKeyListener {
 
     Gson gson = new Gson();
 
@@ -85,6 +87,7 @@ public class Activity_Delivery extends AppCompatActivity
     String str_msg_img;
     int lastMsgNo;
     int range = 1;
+    int start = 0;
     boolean stop = false;
 
     @Override
@@ -145,6 +148,7 @@ public class Activity_Delivery extends AppCompatActivity
         mapView.setMapViewEventListener(this);
         mapView.setPOIItemEventListener(this);
         mapView.setCurrentLocationEventListener(this);
+        edtMessage.setOnKeyListener(this);
         lvOrderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -164,6 +168,8 @@ public class Activity_Delivery extends AppCompatActivity
             pickedOrderVo = ConvertUtil.getOrderVo(map);
             showOrderInfo();
             setLvMessage();
+        } else {
+            showOrderList();
         }
     }
 
@@ -199,7 +205,9 @@ public class Activity_Delivery extends AppCompatActivity
 
         adapter = new Adapter_Message(messageList, deliverVo, getLayoutInflater());
         lvMessage.setAdapter(adapter);
-        if(thread.isAlive()) {
+        lvMessage.setSelection(messageList.size()-1);
+        Log.d("스레드얼라이브", String.valueOf(thread.isAlive()));
+        if(start++ == 0) {
             thread.start();
         }
     }
@@ -210,13 +218,10 @@ public class Activity_Delivery extends AppCompatActivity
         params.put("order_no", pickedOrderVo.getOrder_no());
         params.put("msg_no", lastMsgNo);
         List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
-        Log.d("메시지리스트", list.toString());
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Map<String, Object> map = list.get(i);
-                Log.d("메시지맵", map.toString());
                 MessageVo messageVo = ConvertUtil.getMessageVo(map);
-                Log.d("메시지브이오", messageVo.toString());
                 messageList.add(messageVo);
 
                 if (i == list.size() - 1) {
@@ -341,7 +346,7 @@ public class Activity_Delivery extends AppCompatActivity
         btnShowMessage.setVisibility(View.VISIBLE);
         btnShowOrderList.setText("주문 정보 보기");
 
-        stop = true;
+        stop = false;
         txtPickedOrderNo.setText(String.valueOf(pickedOrderVo.getOrder_no()));
         txtPickedUserName.setText(pickedOrderVo.getUser_name());
         double order_lat = pickedOrderVo.getOrder_lat();
@@ -358,7 +363,7 @@ public class Activity_Delivery extends AppCompatActivity
         btnShowMessage.setVisibility(View.GONE);
         btnShowOrderList.setText("주문 리스트 보기");
 
-        stop = false;
+        stop = true;
         pickedOrderVo = null;
         messageList = null;
         lvMessage.setAdapter(null);
@@ -372,7 +377,10 @@ public class Activity_Delivery extends AppCompatActivity
             switch (requestCode) {
                 case MESSAGE_IMAGE:
                     msg_img = FileUploadUtil.getFile(this, data.getData());
+                    str_msg_img = MESSAGE_IMG + deliverVo.getDlvr_id() + msg_img.getName();
+                    Log.d("이미지", msg_img.toString());
                     if (FileUploadUtil.isImage(msg_img)) {
+                        Log.d("이미지임", "ㅇㅇ");
                         String result = DeliveryUtil.sendMsgImg(str_msg_img, pickedOrderVo);
                         if (result.equals("sendMsgImg_success")) {
                             FileUploadUtil.upload(this, msg_img, str_msg_img);
@@ -425,10 +433,11 @@ public class Activity_Delivery extends AppCompatActivity
                 break;
             case R.id.btnSendMessage:
                 String msg_content = edtMessage.getText().toString();
-                result = DeliveryUtil.sendMsgContent(msg_content, pickedOrderVo);
-                if (result.equals("sendMsgContent_success")) {
-                    edtMessage.setText("");
-                    getCurrentMessage();
+                if(!msg_content.equals("") && edtMessage != null) {
+                    result = DeliveryUtil.sendMsgContent(msg_content, pickedOrderVo);
+                    if (result.equals("sendMsgContent_success")) {
+                        edtMessage.setText("");
+                    }
                 } else {
                     Toast.makeText(this, "글 입력을 하세요", Toast.LENGTH_SHORT).show();
                 }
@@ -540,6 +549,27 @@ public class Activity_Delivery extends AppCompatActivity
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
         Log.d("current", "canceled");
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if (v == edtMessage) {
+                String msg_content = edtMessage.getText().toString();
+                if(!msg_content.equals("") && edtMessage != null) {
+                    String result = DeliveryUtil.sendMsgContent(msg_content, pickedOrderVo);
+                    if (result.equals("sendMsgContent_success")) {
+                        edtMessage.setText("");
+                    }
+                } else {
+                    Toast.makeText(this, "글 입력을 하세요", Toast.LENGTH_SHORT).show();
+                }
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+            return true;
+        }
+        return false;
     }
 
     class MessageThread extends Thread {

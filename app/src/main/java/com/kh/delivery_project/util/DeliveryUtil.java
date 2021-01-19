@@ -1,6 +1,7 @@
 package com.kh.delivery_project.util;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.kh.delivery_project.connection.ConnectServer;
@@ -56,7 +57,8 @@ public class DeliveryUtil {
     }
 
     public static String sendMsgImg(String str_msg_img, OrderVo pickedOrderVo) {
-        String url = "/message/sendMsgImg";
+        Log.d("이미지센드", str_msg_img);
+        String url = "/message/android/sendMsgImg";
         ContentValues params = new ContentValues();
         params.put("order_no", pickedOrderVo.getOrder_no());
         params.put("sender_no", pickedOrderVo.getDlvr_no());

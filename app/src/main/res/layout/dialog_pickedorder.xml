@@ -1,93 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical">
-<!--    배달 정보 조회 다이얼로그-->
+    <!--    배달 정보 조회 다이얼로그-->
 
-    <TableLayout
-        android:layout_width="250dp"
-        android:layout_height="350dp"
-        android:stretchColumns="*">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="vertical">
 
-        <TableRow
-            android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
+                android:layout_weight="2"
+                android:background="@drawable/stroke"
+                android:gravity="center"
                 android:text="주문 번호"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/txtDialogOrderNo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:text="주문 번호 입력"
-                android:textColor="#000000"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/stroke"
                 android:gravity="center"
-                android:text="주문 아이디"
-                android:textColor="#000000"/>
+                android:text="주문 번호 입력"
+                android:textColor="#000000"
+                android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/txtDialogUserName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:text="아이디 입력"
-                android:textColor="#000000"/>
-        </TableRow>
+        </LinearLayout>
 
-        <TableRow
-            android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_weight="2"
+                android:background="@drawable/stroke"
+                android:gravity="center"
                 android:text="픽업 위치"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/txtDialogOrderLoc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/stroke"
+                android:gravity="center"
                 android:text="픽업 위치 입력"
-                android:textColor="#000000"/>
-        </TableRow>
+                android:textColor="#000000"
+                android:textSize="20dp" />
 
-        <TableRow
-            android:layout_weight="1">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/stroke"
+                android:gravity="center"
+                android:text="주문자 이름"
+                android:textColor="#000000"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txtDialogUserName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/stroke"
+                android:gravity="center"
+                android:text="이름 입력"
+                android:textColor="#000000"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/stroke"
                 android:gravity="center"
                 android:text="주문 요구사항"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/txtDialogOrderReq"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/stroke"
+                android:gravity="center"
                 android:text="요구사항 입력"
-                android:textColor="#000000"/>
-        </TableRow>
+                android:textColor="#000000"
+                android:textSize="20dp" />
 
-    </TableLayout>
+        </LinearLayout>
 
+    </LinearLayout>
 
 </LinearLayout>
