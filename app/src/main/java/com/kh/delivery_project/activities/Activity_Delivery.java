@@ -111,7 +111,6 @@ public class Activity_Delivery extends AppCompatActivity
     }
 
     private void setViews() {
-
         btnShowOrderList = findViewById(R.id.btnShowOrderList);
         btnShowMap = findViewById(R.id.btnShowMap);
         btnDeliveryComplete = findViewById(R.id.btnDeliveryComplete);
@@ -205,9 +204,8 @@ public class Activity_Delivery extends AppCompatActivity
 
         adapter = new Adapter_Message(messageList, deliverVo, getLayoutInflater());
         lvMessage.setAdapter(adapter);
-        lvMessage.setSelection(messageList.size()-1);
-        Log.d("스레드얼라이브", String.valueOf(thread.isAlive()));
-        if(start++ == 0) {
+        lvMessage.setSelection(messageList.size() - 1);
+        if (start++ == 0) {
             thread.start();
         }
     }
@@ -256,8 +254,9 @@ public class Activity_Delivery extends AppCompatActivity
                         String result = DeliveryUtil.pickOrder(order_no, dlvr_no);
                         if (result.equals("pickOrder_success")) {
                             getPickedOrderVo();
+                            Toast.makeText(Activity_Delivery.this, "주문 접수 완료", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(Activity_Delivery.this, "다른 사람이 주문 픽업", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Activity_Delivery.this, "주문이 취소되거나 다른 배달원이 접수했습니다", Toast.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();
                     }
@@ -378,19 +377,14 @@ public class Activity_Delivery extends AppCompatActivity
                 case MESSAGE_IMAGE:
                     msg_img = FileUploadUtil.getFile(this, data.getData());
                     str_msg_img = MESSAGE_IMG + deliverVo.getDlvr_id() + msg_img.getName();
-                    Log.d("이미지", msg_img.toString());
                     if (FileUploadUtil.isImage(msg_img)) {
-                        Log.d("이미지임", "ㅇㅇ");
                         String result = DeliveryUtil.sendMsgImg(str_msg_img, pickedOrderVo);
                         if (result.equals("sendMsgImg_success")) {
                             FileUploadUtil.upload(this, msg_img, str_msg_img);
-                            getCurrentMessage();
                         }
                     }
                     break;
             }
-        } else if (requestCode == RESULT_CANCELED) {
-            Toast.makeText(this, "다른 사람이 주문 픽업", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -417,10 +411,10 @@ public class Activity_Delivery extends AppCompatActivity
             case R.id.btnDeliveryComplete:
                 result = DeliveryUtil.deliveryComplete(pickedOrderVo);
                 if (result.equals("delivery_completed")) {
-                    Toast.makeText(this, "배달 완료!!!!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "배달 완료!", Toast.LENGTH_SHORT).show();
                     showOrderList();
                 } else {
-                    Toast.makeText(this, "배달 실패......", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "What's wrong?", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnDeliveryCancel:
@@ -433,13 +427,13 @@ public class Activity_Delivery extends AppCompatActivity
                 break;
             case R.id.btnSendMessage:
                 String msg_content = edtMessage.getText().toString();
-                if(!msg_content.equals("") && edtMessage != null) {
+                if (!msg_content.equals("") && edtMessage != null) {
                     result = DeliveryUtil.sendMsgContent(msg_content, pickedOrderVo);
                     if (result.equals("sendMsgContent_success")) {
                         edtMessage.setText("");
                     }
                 } else {
-                    Toast.makeText(this, "글 입력을 하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "메시지를 작성해주세요", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnMessageImg:
@@ -556,7 +550,7 @@ public class Activity_Delivery extends AppCompatActivity
         if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
             if (v == edtMessage) {
                 String msg_content = edtMessage.getText().toString();
-                if(!msg_content.equals("") && edtMessage != null) {
+                if (!msg_content.equals("") && edtMessage != null) {
                     String result = DeliveryUtil.sendMsgContent(msg_content, pickedOrderVo);
                     if (result.equals("sendMsgContent_success")) {
                         edtMessage.setText("");

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,12 +74,10 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
     LinearLayout boardWriteForm;
     ProgressBar boardProgressbar;
     ListView boardListView;
-    Button btnToggleWriteForm, btnInsertArticle, btnSelectImg, btnModTimeImg;
-    EditText edtBoard, edtTimeContent;
+    Button btnToggleWriteForm, btnInsertArticle, btnSelectImg;
+    EditText edtBoard;
     ImageView ivWriteImg, ivDialogTimeImg;
     Spinner boardSpinner;
-    TextView txtWriterName, txtTimeContent;
-    RatingBar rbTimeStar;
 
     boolean lockListView = false;
     boolean islastItem = false;
@@ -86,11 +85,13 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
     boolean firstSelect = false;
     List<TimelineVo> timelineList = new ArrayList<>();
     List<TimelineVo> showList = new ArrayList<>();
+
+    boolean isStart = true;
+    DeliverVo deliverVo;
     int page = 0;
     int offset = 10;
     File writeTimeImg, modTimeImg;
     String time_img;
-    DeliverVo deliverVo;
     String[] select = {"전체", "공지", "리뷰", "자유"};
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -104,6 +105,14 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
         setSpinner();
         setListeners();
         setTimelineList(ALL_TIMELINE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isStart) {
+            refresh();
+        }
     }
 
     private void setViews() {
@@ -146,6 +155,7 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
                 params.put("searchType", "2-003");
                 break;
         }
+        params.put("account_no", deliverVo.getDlvr_no());
         List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url, params), List.class);
         Log.d("list is", list.toString());
         timelineList = new ArrayList<>();
@@ -168,7 +178,6 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
         lockListView = true;
 
         int startIndex = page * offset;
-        Log.d("비교 전", "timelineList = " + timelineList.size() + ", startIndex = " + startIndex + ", showList = " + showList.size() + ", page = " + page);
         if (startIndex <= showList.size()) {
             int endIndex = startIndex + offset;
             if (endIndex > timelineList.size()) {
@@ -187,19 +196,16 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
                     adapter.notifyDataSetChanged();
                     boardProgressbar.setVisibility(View.GONE);
                     lockListView = false;
-                    Log.d("page is", "" + page);
                 }
             }, 1000);
         } else {
             if (!showEnd) {
-                Toast.makeText(this, "마지막 글", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "마지막 글입니다", Toast.LENGTH_SHORT).show();
                 showEnd = true;
             }
-            Log.d("page is", "" + page);
             boardProgressbar.setVisibility(View.GONE);
             lockListView = false;
         }
-        Log.d("비교 후", "timelineList = " + timelineList.size() + ", startIndex = " + startIndex + ", showList = " + showList.size() + ", page = " + page);
     }
 
     private void showImage(Uri uri, ImageView iv) {
@@ -214,44 +220,46 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
     }
 
     private String insertArticle() {
-        int writer_no = deliverVo.getDlvr_no();
-        String time_content = edtBoard.getText().toString();
-
-        Log.d("time_content", time_content);
         String url = "/timeline/android/insertArticle";
         ContentValues params = new ContentValues();
-        params.put("writer_no", writer_no);
-        params.put("time_content", time_content);
-        params.put("writer_state", "2-013");
-        params.put("time_state", "2-003");
+        String time_content = edtBoard.getText().toString();
+        if((time_content != null && !time_content.equals("")) || writeTimeImg != null) {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("주소 실패", "fail");
-        } else {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double latitude = location.getLatitude();
-            double longtitude = location.getLongitude();
-            String address = AddressUtil.getAddress(this, latitude, longtitude);
-            Log.d("주소", address);
-            String[] addrList = address.split(" ");
-            Log.d("addrList", Arrays.toString(addrList));
-            for(int i = 0; i < addrList.length; i++) {
-                String time_location = addrList[i].substring(addrList[i].length()-1);
-                Log.d("동찾기", time_location);
-                if(time_location.equals("동")) {
-                    params.put("time_location", addrList[i]);
-                    break;
+            int writer_no = deliverVo.getDlvr_no();
+            params.put("writer_no", writer_no);
+            params.put("time_content", time_content);
+            params.put("writer_state", "2-013");
+            params.put("time_state", "2-003");
+            if (writeTimeImg != null) {
+                time_img = TIMELINE_IMG + deliverVo.getDlvr_id() + "_" + writeTimeImg.getName();
+                params.put("time_img", time_img);
+            }
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Log.d("주소 실패", "fail");
+            } else {
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                double latitude = location.getLatitude();
+                double longtitude = location.getLongitude();
+                String address = AddressUtil.getAddress(this, latitude, longtitude);
+                Log.d("주소", address);
+                String[] addrList = address.split(" ");
+                Log.d("addrList", Arrays.toString(addrList));
+                for (int i = 0; i < addrList.length; i++) {
+                    String time_location = addrList[i].substring(addrList[i].length() - 1);
+                    Log.d("동찾기", time_location);
+                    if (time_location.equals("동")) {
+                        params.put("time_location", addrList[i]);
+                        break;
+                    }
                 }
             }
+            Log.d("글쓰기", params.toString());
+            String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
+            return result;
+        } else {
+            return "fail";
         }
-
-        if (writeTimeImg != null) {
-            time_img = TIMELINE_IMG + deliverVo.getDlvr_id() + "_" + writeTimeImg.getName();
-            params.put("time_img", time_img);
-        }
-        Log.d("글쓰기", params.toString());
-        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        return result;
     }
 
     private void refresh() {
@@ -305,11 +313,16 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
                 } else {
                     boardWriteForm.setVisibility(View.GONE);
                     btnToggleWriteForm.setText("글 작성");
+                    edtBoard.setText("");
+                    ivWriteImg.setImageBitmap(null);
+                    writeTimeImg = null;
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 }
                 break;
             case R.id.btnInsertArticle:
                 if (insertArticle().equals("insertArticle_success")) {
-                    if(time_img != null) {
+                    if (time_img != null) {
                         FileUploadUtil.upload(this, writeTimeImg, time_img);
                     }
                     boardWriteForm.setVisibility(View.GONE);
@@ -319,7 +332,7 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
                     Toast.makeText(this, "작성 완료", Toast.LENGTH_SHORT).show();
                     refresh();
                 } else {
-                    Toast.makeText(this, "에러ㅓㅓㅓㅓ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "글 작성을 하지 않았거나, 사진을 등록하지 않았습니다", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnSelectImg:
@@ -333,9 +346,7 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        Log.d("onScrollStateChanged", "...");
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && islastItem && !lockListView) {
-            Log.d("onScrollStateChanged", "true");
             boardProgressbar.setVisibility(View.VISIBLE);
             getItem();
         }
@@ -343,7 +354,6 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        Log.d("scroll", "scrolled");
         islastItem = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
     }
 
@@ -352,15 +362,16 @@ public class Activity_Timeline extends AppCompatActivity implements Codes, View.
         final TimelineVo timelineVo = timelineList.get(position);
         Intent intent = new Intent(getApplicationContext(), Activity_TimelineInfo.class);
         intent.putExtra("time_no", timelineVo.getTime_no());
+        isStart = false;
         startActivity(intent);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(firstSelect) {
-            int eventCode = position + 410;
+        if (firstSelect) {
+            int eventCode = position + 10300;
             resetTimeline();
-            switch(eventCode) {
+            switch (eventCode) {
                 case ALL_TIMELINE:
                     setTimelineList(ALL_TIMELINE);
                     break;

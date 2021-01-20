@@ -78,10 +78,10 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url), List.class);
         Log.d("pointRank", list.toString());
         if(list.size() > 0) {
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < list.size(); i++) {
                 Map<String, Object> map = list.get(i);
                 AccountDto accountDto = ConvertUtil.getAccountDto(map);
-                String text = accountDto.getAcc_name() + " 님\n - " + accountDto.getAcc_point() + " 점";
+                String text = accountDto.getAcc_name() + " 님\n    " + accountDto.getAcc_point() + " 점";
                 txtPointRank[i].setText(text);
             }
         }
@@ -92,10 +92,10 @@ public class Activity_Deliver_Main extends AppCompatActivity implements Codes, K
         List<Map<String, Object>> list = gson.fromJson(ConnectServer.getData(url), List.class);
         Log.d("dlvrRank", list.toString());
         if(list.size() > 0) {
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < list.size(); i++) {
                 Map<String, Object> map = list.get(i);
                 DeliverVo deliverVo = ConvertUtil.getDeliverVo(map);
-                String text = deliverVo.getDlvr_name() + " 님\n - " + deliverVo.getOrder_count() + " 회";
+                String text = deliverVo.getDlvr_name() + " 님\n    " + deliverVo.getOrder_count() + " 회";
                 txtDlvrRank[i].setText(text);
             }
         }

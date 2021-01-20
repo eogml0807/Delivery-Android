@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -56,10 +57,11 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
 
     Gson gson = new Gson();
 
+    LinearLayout linModButtons;
     ImageView civWriterImg, ivTimeLike, ivTimeImg;
     TextView txtLikeCount, txtWriterName, txtTimeDate, txtTimeContent;
     EditText edtComment, edtTimeContent;
-    Button btnInsertComment, btnModTimeImg, btnModTimelineOk, btnCancelModTimeline;
+    Button btnInsertComment, btnModTimelineOk, btnCancelModTimeline;
     RatingBar rbTimeStar;
     ListView lvCommentList;
 
@@ -72,7 +74,6 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
 
     boolean isLike = false;
     int lastCommentNo;
-    File modTimeImg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +83,6 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         setTitle("게시글 정보");
         setTimelineVo();
         setCommentList();
-        isLike();
         setViews();
         setListeners();
         setListView();
@@ -110,6 +110,7 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         String url = "/timeline/android/getTimelineInfo";
         ContentValues params = new ContentValues();
         params.put("time_no", time_no);
+        params.put("account_no", deliverVo.getDlvr_no());
         Map<String, Object> map = gson.fromJson(ConnectServer.getData(url, params), Map.class);
         timelineVo = ConvertUtil.getTimelineVo(map);
     }
@@ -128,16 +129,8 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         }
     }
 
-    private void isLike() {
-        String url = "/like/isLike";
-        ContentValues params = new ContentValues();
-        params.put("time_no", timelineVo.getTime_no());
-        params.put("account_no", deliverVo.getDlvr_no());
-        Boolean result = gson.fromJson(ConnectServer.getData(url, params), Boolean.class);
-        isLike = result;
-    }
-
     private void setViews() {
+        linModButtons = findViewById(R.id.linModButtons);
         civWriterImg = findViewById(R.id.civWriterImg);
         ivTimeLike = findViewById(R.id.ivTimeLike);
         ivTimeImg = findViewById(R.id.ivTimeImg);
@@ -147,7 +140,6 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         txtTimeContent = findViewById(R.id.txtTimeContent);
         edtComment = findViewById(R.id.edtComment);
         edtTimeContent = findViewById(R.id.edtTimeContent);
-        btnModTimeImg = findViewById(R.id.btnModTimeImg);
         btnModTimelineOk = findViewById(R.id.btnModTimelineOk);
         btnInsertComment = findViewById(R.id.btnInsertComment);
         btnCancelModTimeline = findViewById(R.id.btnCancelModTimeline);
@@ -159,8 +151,9 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         String imgUrl = IMAGE_ADDRESS + timelineVo.getWriter_img();
         UrlImageUtil urlImageUtil = new UrlImageUtil(imgUrl, civWriterImg);
         urlImageUtil.execute();
-        if(isLike) {
+        if(timelineVo.getLiked_no() != -1) {
             ivTimeLike.setImageResource(R.drawable.ic_favorite);
+            isLike = true;
         }
         String time_img = timelineVo.getTime_img();
         if(time_img != null) {
@@ -183,7 +176,6 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
     private void setListeners() {
         ivTimeLike.setOnClickListener(this);
         btnInsertComment.setOnClickListener(this);
-        btnModTimeImg.setOnClickListener(this);
         btnModTimelineOk.setOnClickListener(this);
         btnCancelModTimeline.setOnClickListener(this);
         lvCommentList.setOnItemClickListener(this);
@@ -213,13 +205,17 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
     }
 
     private String insertComment() {
-        String url = "/comment/insertComment";
-        ContentValues params = new ContentValues();
-        params.put("c_content", edtComment.getText().toString());
-        params.put("time_no", timelineVo.getTime_no());
-        params.put("writer_no", deliverVo.getDlvr_no());
-        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
-        return result;
+        if(edtComment.getText().toString() != null && !edtComment.equals("")) {
+            String url = "/comment/insertComment";
+            ContentValues params = new ContentValues();
+            params.put("c_content", edtComment.getText().toString());
+            params.put("time_no", timelineVo.getTime_no());
+            params.put("writer_no", deliverVo.getDlvr_no());
+            String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
+            return result;
+        } else {
+            return "fail";
+        }
     }
 
     private void getCurrentComment() {
@@ -274,31 +270,44 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
 //        return true;
 //    }
 
-    private void showImage(Uri uri, ImageView iv) {
-        try {
-            InputStream is = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            iv.setImageBitmap(bitmap);
-            is.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private String deleteTimeline() {
+        String url = "/timeline/android/deleteArticle";
+        ContentValues params = new ContentValues();
+        params.put("time_no", timelineVo.getTime_no());
+        String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
+        return result;
+    }
+
+    private String updateTimeline() {
+        if(edtTimeContent.getText().toString() != null && !edtTimeContent.getText().toString().equals("")) {
+            String url = "/timeline/android/updateArticle";
+            ContentValues params = new ContentValues();
+            params.put("time_no", timelineVo.getTime_no());
+            params.put("time_content", edtTimeContent.getText().toString());
+            String result = gson.fromJson(ConnectServer.getData(url, params), String.class);
+            return result;
+        } else {
+            return "fail";
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case MOD_TIME_IMG:
-                    modTimeImg = FileUploadUtil.getFile(this, data.getData());
-                    if (FileUploadUtil.isImage(modTimeImg)) {
-                        showImage(data.getData(), ivTimeImg);
-                    }
-                    break;
-            }
+    private void toggleButtons() {
+        if(linModButtons.getVisibility() == View.GONE) {
+            txtTimeContent.setVisibility(View.GONE);
+            edtTimeContent.setVisibility(View.VISIBLE);
+            linModButtons.setVisibility(View.VISIBLE);
+        } else {
+            txtTimeContent.setVisibility(View.VISIBLE);
+            edtTimeContent.setVisibility(View.INVISIBLE);
+            linModButtons.setVisibility(View.GONE);
         }
+    }
+
+    private void refresh() {
+        Intent intent = new Intent(getApplicationContext(), Activity_TimelineInfo.class);
+        intent.putExtra("time_no", timelineVo.getTime_no());
+        finish();
+        startActivity(intent);
     }
 
     @Override
@@ -313,44 +322,43 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
                     result = insertLike();
                     if(result.equals("insertLike_success")) {
                         ivTimeLike.setImageResource(R.drawable.ic_favorite);
-                        isLike = true;
-                        likeCount++;
+                        txtLikeCount.setText(String.valueOf(++likeCount));
                     }
+                    isLike = true;
                 } else {
                     result = deleteLike();
                     if(result.equals("deleteLike_success")) {
                         ivTimeLike.setImageResource(R.drawable.ic_favorite_borde);
-                        isLike = false;
-                        likeCount--;
+                        txtLikeCount.setText(String.valueOf(--likeCount));
                     }
+                    isLike = false;
                 }
-                txtLikeCount.setText(String.valueOf(likeCount));
                 break;
             case R.id.btnInsertComment:
-                result = insertComment();
-                if(result.equals("insertComment_success")) {
+                if(insertComment().equals("insertComment_success")) {
                     edtComment.setText("");
                     getCurrentComment();
+                } else {
+                    Toast.makeText(this, "댓글 내용을 작성해주세요", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.btnModTimeImg:
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, MOD_TIME_IMG);
-                break;
             case R.id.btnModTimelineOk:
-//                updateTimeline();
+                if(updateTimeline().equals("updateArticle_success")) {
+                    Toast.makeText(this, "수정 완료", Toast.LENGTH_SHORT).show();
+                    refresh();
+                } else {
+                    Toast.makeText(this, "수정 내용을 작성해주세요", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btnCancelModTimeline:
-                toggleButtons(true);
+                toggleButtons();
                 break;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, "아이템클릭", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -375,44 +383,17 @@ public class Activity_TimelineInfo extends AppCompatActivity implements Codes, V
         int id = item.getItemId();
         switch (id) {
             case R.id.menuDelTimeline:
-//                if(deleteTimeline(timelineVo.getTime_no()).equals("deleteArticle_success")) {
-//
-//                } else {
-//                    Toast.makeText(this, "삭제 실패", Toast.LENGTH_SHORT).show();
-//                }
+                if(deleteTimeline().equals("deleteArticle_success")) {
+                    Toast.makeText(this, "삭제 완료", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(this, "삭제 중 오류가 발생했습니다", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.menuModTimeline:
-                toggleButtons(true);
+                toggleButtons();
                 break;
         }
         return false;
-    }
-
-    private void updateTimeline() {
-        String url = "/timeline/updateArticle";
-        ContentValues params = new ContentValues();
-    }
-
-    private void toggleButtons(boolean b) {
-        if(b) {
-            txtTimeContent.setVisibility(View.GONE);
-            edtTimeContent.setVisibility(View.VISIBLE);
-            btnModTimeImg.setVisibility(View.VISIBLE);
-            btnModTimelineOk.setVisibility(View.VISIBLE);
-        } else {
-            txtTimeContent.setVisibility(View.VISIBLE);
-            edtTimeContent.setVisibility(View.GONE);
-            btnModTimeImg.setVisibility(View.GONE);
-            btnModTimelineOk.setVisibility(View.GONE);
-            String imgUrl = IMAGE_ADDRESS + timelineVo.getWriter_img();
-            UrlImageUtil urlImageUtil = new UrlImageUtil(imgUrl, civWriterImg);
-            urlImageUtil.execute();
-        }
-    }
-
-    private String deleteTimeline(int time_no) {
-        String url = "/timeline/deleteArticle/" + time_no;
-        String result = gson.fromJson(ConnectServer.getData(url), String.class);
-        return result;
     }
 }

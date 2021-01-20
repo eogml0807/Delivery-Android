@@ -23,6 +23,7 @@ public class TimelineVo implements Parcelable {
     private String writer_name;
     private String dlvr_name;
     private String writer_img;
+    private int liked_no;
 
     public TimelineVo() {
     }
@@ -41,6 +42,7 @@ public class TimelineVo implements Parcelable {
         writer_name = in.readString();
         dlvr_name = in.readString();
         writer_img = in.readString();
+        liked_no = in.readInt();
     }
 
     @Override
@@ -58,6 +60,7 @@ public class TimelineVo implements Parcelable {
         dest.writeString(writer_name);
         dest.writeString(dlvr_name);
         dest.writeString(writer_img);
+        dest.writeInt(liked_no);
     }
 
     @Override
@@ -189,6 +192,14 @@ public class TimelineVo implements Parcelable {
         this.writer_img = writer_img;
     }
 
+    public int getLiked_no() {
+        return liked_no;
+    }
+
+    public void setLiked_no(int liked_no) {
+        this.liked_no = liked_no;
+    }
+
     @Override
     public String toString() {
         return "TimelineVo{" +
@@ -206,6 +217,7 @@ public class TimelineVo implements Parcelable {
                 ", writer_name='" + writer_name + '\'' +
                 ", dlvr_name='" + dlvr_name + '\'' +
                 ", writer_img='" + writer_img + '\'' +
+                ", liked_no=" + liked_no +
                 '}';
     }
 }
